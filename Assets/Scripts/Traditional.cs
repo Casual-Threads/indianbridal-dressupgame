@@ -126,15 +126,14 @@ public class Traditional : MonoBehaviour
     private int[] bindiScroe = { 1865, 1186, 5594, 4915, 2501, 1964, 2478, 6599, 2666, 5986, 3028, 5522, 2241, 2655, 3453, 7564};
     private int[] handitemScroe = { 2864, 2185, 4593, 6915, 3505, 3965, 3476, 6489, 3676, 5876, 3425, 4523, 1242, 1656};
     private int[] earingScroe = { 1964, 3175, 2595, 3815, 5805, 3735, 2475, 5487, 3578, 4886, 2455, 3425, 3282, 1546, 2354};
-    private int[] dressScroe = { 1564, 3245, 2845, 1515, 4705, 1635, 2585, 4357, 3065, 4546, 1457, 2415, 5162};
+    private int[] dressScroe = { 1564, 3245, 2845, 1515, 4705, 1635, 2585, 4357, 3065, 4546, 1457, 2415, 5162, 1248, 5438};
     private int[] mathapatiScroe = { 1763, 1296, 4584, 3715, 2401, 1744, 2568, 4589, 2054, 5726, 3548, 5128, 2381, 2585, 1472, 6453};
     private int[] necklaceScroe = { 2874, 2165, 1485, 2415, 4705, 2734, 2185, 2467, 3578, 3526, 1456, 2585, 1272, 2945, 2464 };
-    //private int[] handitemScroe = { 2864, 2185, 4593, 6915, 3505, 3965, 3476, 6489, 3676, 5876, 3425, 4523, 1242, 1656 };
     private int[] blushScroe = {5481, 2894, 9545, 4784, 8415, 4892, 1654, 8756, 5645, 6156, 3121, 5726, 1161, 1644};
     private int[] eyebrowScroe = {2154, 8421, 2184, 3214, 8489, 7212, 1848, 4231, 2484, 2156, 4844, 2391, 9681, 0824};
     private int[] eyeshadeScroe = {2112, 1421, 4821, 5212, 1613, 8264, 1262, 3162, 1142, 3146, 3121, 2984};
     private int[] hairScroe = {2156, 4121, 5451, 4923, 1842, 1564, 8921, 4215, 4121, 5648, 2165, 2118};
-    private int[] lipsScroe = {1164, 5421, 2174, 3214, 5489, 7252, 1643, 2181, 2974, 2125, 4754, 2381, 1651, 3726};
+    private int[] lipsScroe = {1164, 5421, 2174, 3214, 5489, 7252, 1643, 2181, 2974, 2125, 4754, 2381, 1651, 3726, 5448, 1548};
     private int[] shoesScroe = {2132, 4842, 1482, 2164, 4512, 1641, 2316, 6213, 2156, 4821, 1568, 4895, 1231, 6123};
     [Header("Default Character Sprites")]
     public Sprite defaultdress;
@@ -551,6 +550,8 @@ public class Traditional : MonoBehaviour
                             if (selectedItem == TraditionalSelectedItem.dress)
                             {
                                 IsDressing = true;
+                                playerElements.dressImage.gameObject.SetActive(true);
+                                playerElements.frockImage.gameObject.SetActive(false);
                                 if (playerdressScore == int.Parse(itemInfoList[selectedIndex].ItemScore.text))
                                 {
                                     return;
@@ -567,7 +568,42 @@ public class Traditional : MonoBehaviour
                                     playerScore = playerScore + int.Parse(itemInfoList[selectedIndex].ItemScore.text);
                                     playerdressScore = int.Parse(itemInfoList[selectedIndex].ItemScore.text);
                                 }
-                                
+
+                                if (playerfrockScore > 0)
+                                {
+                                    playerScore = playerScore - playerfrockScore;
+                                    playerfrockScore = 0;
+                                }
+
+                            }
+
+                            else if (selectedItem == TraditionalSelectedItem.frock)
+                            {
+                                IsDressing = true;
+                                playerElements.dressImage.gameObject.SetActive(false);
+                                playerElements.frockImage.gameObject.SetActive(true);
+                                if (playerfrockScore == int.Parse(itemInfoList[selectedIndex].ItemScore.text))
+                                {
+                                    return;
+                                }
+
+                                if (playerfrockScore == 0)
+                                {
+                                    playerScore = playerScore + int.Parse(itemInfoList[selectedIndex].ItemScore.text);
+                                    playerfrockScore = int.Parse(itemInfoList[selectedIndex].ItemScore.text);
+                                }
+                                else
+                                {
+                                    playerScore = playerScore - playerfrockScore;
+                                    playerScore = playerScore + int.Parse(itemInfoList[selectedIndex].ItemScore.text);
+                                    playerfrockScore = int.Parse(itemInfoList[selectedIndex].ItemScore.text);
+                                }
+
+                                if (playerdressScore > 0)
+                                {
+                                    playerScore = playerScore - playerdressScore;
+                                    playerdressScore = 0;
+                                }
                             }
 
                             else if (selectedItem == TraditionalSelectedItem.shoes)
@@ -609,27 +645,6 @@ public class Traditional : MonoBehaviour
                                     playerScore = playerScore - playernecklaceScore;
                                     playerScore = playerScore + int.Parse(itemInfoList[selectedIndex].ItemScore.text);
                                     playernecklaceScore = int.Parse(itemInfoList[selectedIndex].ItemScore.text);
-                                }
-                            }
-
-                            else if (selectedItem == TraditionalSelectedItem.frock)
-                            {
-                                IsAccessioress = true;
-                                if (playerfrockScore == int.Parse(itemInfoList[selectedIndex].ItemScore.text))
-                                {
-                                    return;
-                                }
-
-                                if (playerfrockScore == 0)
-                                {
-                                    playerScore = playerScore + int.Parse(itemInfoList[selectedIndex].ItemScore.text);
-                                    playerfrockScore = int.Parse(itemInfoList[selectedIndex].ItemScore.text);
-                                }
-                                else
-                                {
-                                    playerScore = playerScore - playerfrockScore;
-                                    playerScore = playerScore + int.Parse(itemInfoList[selectedIndex].ItemScore.text);
-                                    playerfrockScore = int.Parse(itemInfoList[selectedIndex].ItemScore.text);
                                 }
                             }
 
@@ -861,8 +876,18 @@ public class Traditional : MonoBehaviour
     }
 
     #region ItemStatus
-        public void ItemStatus(int itemIndex)
+    public void ItemStatus(int itemIndex)
     {
+        if (itemIndex == 1)
+        {
+            categoryBtn[itemIndex - 1].transform.GetChild(1).GetComponent<Image>().sprite = graySprite;
+            categoryBtn[itemIndex - 1].transform.GetChild(1).GetChild(0).gameObject.SetActive(false);
+        }
+        else if (itemIndex == 0)
+        {
+            categoryBtn[itemIndex + 1].transform.GetChild(1).GetComponent<Image>().sprite = graySprite;
+            categoryBtn[itemIndex + 1].transform.GetChild(1).GetChild(0).gameObject.SetActive(false);
+        }
         categoryBtn[itemIndex].transform.GetChild(1).GetComponent<Image>().sprite = greenSprite;
         categoryBtn[itemIndex].transform.GetChild(1).GetChild(0).gameObject.SetActive(true);
         categoryBtn[itemIndex].transform.GetChild(1).GetChild(0).GetComponent<Image>().sprite = tickSprite;
@@ -1402,7 +1427,7 @@ public class Traditional : MonoBehaviour
             uIElements.cardImage.sprite = cardSprites[Random.Range(0, cardSprites.Length)];
             yield return new WaitForSeconds(0.1f);
         }
-        uIElements.cardImage.sprite = cardSprites[0];
+        uIElements.cardImage.sprite = cardSprites[1];
 
         yield return new WaitForSeconds(0.5f);
         for (int i = 0; i < Random.Range(10, 25); i++)
@@ -1448,26 +1473,28 @@ public class Traditional : MonoBehaviour
         yield return new WaitForSeconds(0.5f);
         if (winSFX) winSFX.Play();
         submitPartical.SetActive(true);
-        
+        playerElements.txtPlayerScore.text = "0000";
+
     }
 
     IEnumerator submitlook()
     {
+        submitPartical.SetActive(false);
         uIElements.bgImage.sprite = judgementalPanelBgSprite;
         uIElements.judgementalPanel.SetActive(true);
         uIElements.submitPanel.SetActive(false);
         yield return new WaitForSeconds(1f);
         oppoElements.character.SetActive(true);
         yield return new WaitForSeconds(0.5f);
-        playerCharacterMover.Move(new Vector3(-290, 63f, 0), 0.7f, true, false);
+        playerCharacterMover.Move(new Vector3(-290, 0, 0), 0.7f, true, false);
         yield return new WaitForSeconds(0.3f);
-        oppoCharacterMover.Move(new Vector3(290, 63f, 0), 0.7f, true, false);
+        oppoCharacterMover.Move(new Vector3(290, 0, 0), 0.7f, true, false);
         SaveData.Instance.vsMode = false;
         yield return new WaitForSeconds(0.2f);
         uIElements.scoreSlot.SetActive(true);
         yield return new WaitForSeconds(0.1f);
         OpponentDressing();
-        yield return new WaitForSeconds(0.1f);
+        yield return new WaitForSeconds(0.5f);
         StartCoroutine(startComparing());
 
     }
@@ -1664,11 +1691,24 @@ public class Traditional : MonoBehaviour
         if (dressList[randomIndex] && oppoElements.dressImage)
         {
             oppoElements.dressImage.gameObject.SetActive(true);
+            oppoElements.frockImage.gameObject.SetActive(false);
             oppoElements.dressImage.sprite = dressSprites[randomIndex];
         }
          
         oppoScore = oppoScore + int.Parse(dressList[randomIndex].ItemScore.text);
         oppodressScore = int.Parse(dressList[randomIndex].ItemScore.text);
+        #endregion
+
+        #region frock
+        randomIndex = Random.Range(0, frockList.Count);
+        if (frockList[randomIndex] && oppoElements.frockImage)
+        {
+            oppoElements.frockImage.gameObject.SetActive(true);
+            oppoElements.dressImage.gameObject.SetActive(false);
+            oppoElements.frockImage.sprite = frockSprites[randomIndex];
+        }
+        oppoScore = oppoScore + int.Parse(frockList[randomIndex].ItemScore.text);
+        oppofrockScore = int.Parse(frockList[randomIndex].ItemScore.text);
         #endregion
 
         #region shoes
@@ -1746,17 +1786,6 @@ public class Traditional : MonoBehaviour
         }
         oppoScore = oppoScore + int.Parse(earingList[randomIndex].ItemScore.text);
         oppoearingScore = int.Parse(earingList[randomIndex].ItemScore.text);
-        #endregion
-
-        #region frock
-        randomIndex = Random.Range(0, frockList.Count);
-        if (frockList[randomIndex] && oppoElements.frockImage)
-        {
-            oppoElements.frockImage.gameObject.SetActive(true);
-            oppoElements.frockImage.sprite = frockSprites[randomIndex];
-        }
-        oppoScore = oppoScore + int.Parse(frockList[randomIndex].ItemScore.text);
-        oppofrockScore = int.Parse(frockList[randomIndex].ItemScore.text);
         #endregion
 
         #region bangle
@@ -1890,7 +1919,7 @@ public class Traditional : MonoBehaviour
             uIElements.levelCompletePanel.SetActive(true);
             uIElements.stageDecuration.SetActive(true);
             yield return new WaitForSeconds(0.3f);
-            playerCharacterMover.Move(new Vector3(54, -50, 0), 0.5f, true, false);
+            playerCharacterMover.Move(new Vector3(54, -90, 0), 0.5f, true, false);
             yield return new WaitForSeconds(0.5f);
             finalPartical.SetActive(true);
             yield return new WaitForSeconds(1f);
@@ -1913,7 +1942,7 @@ public class Traditional : MonoBehaviour
             uIElements.levelCompletePanel.SetActive(true);
             uIElements.stageDecuration.SetActive(true);
             yield return new WaitForSeconds(0.3f);
-            oppoCharacterMover.Move(new Vector3(54, -50, 0), 0.5f, true, false);
+            oppoCharacterMover.Move(new Vector3(54, -90, 0), 0.5f, true, false);
             yield return new WaitForSeconds(0.5f);
             finalPartical.SetActive(true);
             yield return new WaitForSeconds(1f);

@@ -58,7 +58,7 @@ public class TraditionalModeElements
 public class SahreeModeElements
 {
     public List<bool> clutch = new List<bool>();
-    public List<bool> sahree = new List<bool>();
+    public List<bool> dress = new List<bool>();
     public List<bool> bangle = new List<bool>();
     public List<bool> earing = new List<bool>();
     public List<bool> shoes = new List<bool>();
@@ -70,6 +70,7 @@ public class SahreeModeElements
     public List<bool> lips = new List<bool>();
     public List<bool> blush = new List<bool>();
     public List<bool> eyebrow = new List<bool>();
+    public List<bool> bindi = new List<bool>();
 }
 
 [System.Serializable]
