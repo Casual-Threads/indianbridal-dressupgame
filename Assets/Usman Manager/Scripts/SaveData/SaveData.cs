@@ -33,6 +33,7 @@ public class WeddingModeElements
     public List<bool> bindi = new List<bool>();
     public List<bool> blush = new List<bool>();
     public List<bool> eyebrow = new List<bool>();
+    //public List<bool> clutch = new List<bool>();
 }
 
 [System.Serializable]
@@ -41,7 +42,7 @@ public class TraditionalModeElements
     public List<bool> dress = new List<bool>();
     public List<bool> bangle = new List<bool>();
     public List<bool> earing = new List<bool>();
-    public List<bool> handthing = new List<bool>();
+    public List<bool> handitem = new List<bool>();
     public List<bool> shoes = new List<bool>();
     public List<bool> necklace = new List<bool>();
     public List<bool> frock = new List<bool>();

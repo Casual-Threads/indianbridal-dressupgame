@@ -20,7 +20,7 @@ public class WeddingElements
     [Header("Scrollers")]
     public GameObject allScroller;
     public GameObject dressUpCategoryScroller, makeUpCategoryScroller, mathapattiScroller, bindiScroller, bangleScroller, lehangaScroller, earingScroller, noseringScroller, eyebrowScroller,
-                      blushScroller, eyeshadeScroller, necklaceScroller, hairScroller, lipsScroller, shoesScroller;
+                      blushScroller, eyeshadeScroller, necklaceScroller, hairScroller, lipsScroller, shoesScroller/*, clutchScroller*/;
     [Header("UI")]
     public GameObject dressUpBtn;
     public GameObject makeUpBtn, connected, startBtn, coinSlot, previewBtn, scoreSlot, submitPanelbar, lastPanel;
@@ -41,7 +41,7 @@ public class WeddingPlayerElenemts
     [Header("Player Images")]
     public Image mathapattiImage;
     public Image bindiImage, leftBangleImage, rightBangleImage, lehangaImage, earingImage, noseringImage, eyeshadeImage, necklaceImage, hairImage, lipsImage, shoesImage, eyebrowImage,
-                 blushImage;
+                 blushImage/*, clutchImage*/;
     [Header("Player Score Text")]
     public Text txtPlayerScore;
     public Text voteScore, totalScore;
@@ -57,7 +57,7 @@ public class WeddingOpponentElenemts
     [Header("Opponent Images")]
     public Image mathapattiImage;
     public Image bindiImage, leftBangleImage, rightBangleImage, lehangaImage, earingImage, noseringImage, eyeshadeImage, necklaceImage, hairImage, lipsImage, shoesImage, eyebrowImage,
-                 blushImage;
+                 blushImage/*, clutchImage*/;
     [Header("Opponent Bot Images")]
     public Image botInVsPanel;
     public Image botInVsAnimPanel, botInGamePlay, botInJudgementalPanel;
@@ -71,7 +71,7 @@ public class WeddingOpponentElenemts
 [System.Serializable]
 public enum WeddingSelectedItem
 {
-    lehanga, shoes, bangle, earing, necklace, mathapatti, nosering, bindi, lips, hair, eyeshade, eyebrow, blush
+    lehanga, shoes, bangle, earing, necklace, mathapatti, nosering, bindi, lips, hair, eyeshade, eyebrow, blush/*, clutch*/
 }
 
 public class Wedding : MonoBehaviour
@@ -106,6 +106,7 @@ public class Wedding : MonoBehaviour
     public Sprite[] shoesSprites;
     public Sprite[] eyebrowSprites;
     public Sprite[] blushSprites;
+    //public Sprite[] clutchSprites;
     public Sprite[] defaultIconSprites;
     public Sprite[] selectedIconSprites;
     [Header("Scroller Btn Image Array")]
@@ -124,9 +125,10 @@ public class Wedding : MonoBehaviour
     private List<ItemInfo> blushList = new List<ItemInfo>();
     private List<ItemInfo> lipsList = new List<ItemInfo>();
     private List<ItemInfo> shoesList = new List<ItemInfo>();
+    //private List<ItemInfo> clutchList = new List<ItemInfo>();
     private int[] bangleScroe = { 1965, 3186, 6593, 5914, 1500, 2963, 1479, 7598, 1665, 6985, 2008, 6521, 1240, 1654, 4452};
     private int[] bindiScroe = { 1865, 1186, 5594, 4915, 2501, 1964, 2478, 6599, 2666, 5986, 3028, 5522, 2241, 2655, 3453, 7564};
-    private int[] clutchScroe = { 2864, 2185, 4593, 6915, 3505, 3965, 3476, 6489, 3676, 5876, 3425, 4523, 1242, 1656};
+    //private int[] clutchScroe = { 2864, 2185, 4593, 6915, 3505, 3965, 3476, 6489, 3676, 5876, 3425, 4523, 1242, 1656};
     private int[] earingScroe = { 1964, 3175, 2595, 3815, 5805, 3735, 2475, 5487, 3578, 4886, 2455, 3425, 3282, 1546, 2354};
     private int[] lehangaScroe = { 1564, 3245, 2845, 1515, 4705, 1635, 2585, 4357, 3065, 4546, 1457, 2415, 5162};
     private int[] mathapatiScroe = { 1763, 1296, 4584, 3715, 2401, 1744, 2568, 4589, 2054, 5726, 3548, 5128, 2381, 2585, 1472, 6453};
@@ -158,7 +160,6 @@ public class Wedding : MonoBehaviour
     public Animator categorySlot;
     public Animator voteCard;
     [Header("Particles")]
-    public ParticleSystem itemParticle;
     public GameObject submitPartical;
     public GameObject finalPartical;
     [Header("AudioSources")]
@@ -170,12 +171,11 @@ public class Wedding : MonoBehaviour
     private int oppoScore = 0;
     int playerTotalScore, oppoTotalScore = 0;
 
-    //private bool isMathapatti, isBindi, isBangle, isLehanga, isEaring, isNosering, isEyeshade, isNecklace, isHair, isEyebrow, isBlush, isLips, isShoes;
     private bool IsDressing, IsAccessioress, IsMakeup;
-    private int playerlehangaScore, playershoesScore, playerbangleScore, playerearingScore, playernecklaceScore, playermathapattiScore, playernoseringScore, playerbindiScore, 
-                playerlipsScore, playerhairScore, playereyeshadeScore, playereyebrowScore, playerblushScore = 0;
+    private int playerlehangaScore, playershoesScore, playerbangleScore, playerearingScore, playernecklaceScore, playermathapattiScore, playernoseringScore, playerbindiScore,
+                playerclutchScore, playerlipsScore, playerhairScore, playereyeshadeScore, playereyebrowScore, playerblushScore = 0;
     private int oppolehangaScore, opposhoesScore, oppobangleScore, oppoearingScore, opponecklaceScore, oppomathapattiScore, opponoseringScore, oppobindiScore,
-                oppolipsScore, oppohairScore, oppoeyeshadeScore, oppoeyebrowScore, oppoblushScore = 0;
+                oppoclutchScore, oppolipsScore, oppohairScore, oppoeyeshadeScore, oppoeyebrowScore, oppoblushScore = 0;
     private enum RewardType
     {
         none, coins, multipulOfTwo, selectionItem
@@ -200,7 +200,6 @@ public class Wedding : MonoBehaviour
         StartCoroutine(AdDelay(45));
         totalCoins.text = SaveData.Instance.Coins.ToString();
         StartCoroutine(findOpponent());
-        //OpponentDressing();
     }
     public void ShowInterstitial()
     {
@@ -399,6 +398,19 @@ public class Wedding : MonoBehaviour
         SetupItemData(SaveData.Instance.WeddingModeElements.shoes, shoesList);
         SetItemIcon(shoesList, shoesSprites);
         #endregion
+
+        //#region Initialing clutch
+        //if (uIElements.clutchScroller)
+        //{
+        //    var clutchInfo = uIElements.clutchScroller.GetComponentsInChildren<ItemInfo>();
+        //    for (int i = 0; i < clutchInfo.Length; i++)
+        //    {
+        //        clutchList.Add(clutchInfo[i]);
+        //    }
+        //}
+        //SetupItemData(SaveData.Instance.WeddingModeElements.clutch, clutchList);
+        //SetItemIcon(clutchList, clutchSprites);
+        //#endregion
 
         Usman_SaveLoad.SaveProgress();
     }
@@ -1463,7 +1475,6 @@ public class Wedding : MonoBehaviour
             oppoElements.nameVsPanel.gameObject.SetActive(true);
             oppoElements.nameVsPanel.GetComponent<AudioSource>().Play();
             oppoElements.nameVsPanel.text = Name.ToString();
-            //oppoElements.nameVsAnimPanel.text = oppoElements.nameVsPanel.text;
             yield return new WaitForSeconds(0.1f);
         }
         yield return new WaitForSeconds(0.5f);
@@ -1484,6 +1495,10 @@ public class Wedding : MonoBehaviour
         playerCharacterMover.Move(new Vector3(0, 200, -800), 0.7f, true, false);
         yield return new WaitForSeconds(0.68f);
         playerCharacterMover.Move(new Vector3(0, 0, 0), 0.7f, true, false);
+        yield return new WaitForSeconds(0.5f);
+        if (winSFX) winSFX.Play();
+        submitPartical.SetActive(true);
+        
     }
 
     IEnumerator submitlook()

@@ -5,6 +5,7 @@ using System.Collections;
 using Sirenix.OdinInspector;
 using System.Collections.Generic;
 using UnityEngine.SceneManagement;
+using DG.Tweening;
 
 
 [System.Serializable]
@@ -15,17 +16,21 @@ public class TraditionalElements
     public GameObject vsAnimPanel, gamePanel, submitPanel, screenShotPanel, judgementalPanel, stageDecuration, levelCompletePanel, adPanel, loadingPanel;
     [Header("PopUp")]
     public GameObject videoUnlockPopUp;
-    public GameObject coinUnlockPopUp, enoughCoinPopUp, videoAdNotAvailablePopUp;
+    public GameObject coinUnlockPopUp, enoughCoinPopUp, videoAdNotAvailablePopUp, warningPopUp;
     [Header("Scrollers")]
     public GameObject allScroller;
-    public GameObject dressUpCategoryScroller, makeUpCategoryScroller, frockScroller, bindiScroller, bangleScroller, dressScroller, earingScroller, eyebrowScroller, blushScroller,
-                      eyeshadeScroller, necklaceScroller, hairScroller, handthingScroller, lipsScroller, shoesScroller;
+    public GameObject dressUpCategoryScroller, makeUpCategoryScroller, frockScroller, bindiScroller, bangleScroller, dressScroller, earingScroller, eyebrowScroller, handitemScroller,
+                      blushScroller, eyeshadeScroller, necklaceScroller, hairScroller, lipsScroller, shoesScroller;
     [Header("UI")]
     public GameObject dressUpBtn;
-    public GameObject makeUpBtn, connected, startBtn, coinSlot, previewBtn, submitPanelbar, lastPanel;
+    public GameObject makeUpBtn, connected, startBtn, coinSlot, previewBtn, scoreSlot, submitPanelbar, lastPanel;
     [Header("Traditional Image")]
     public Image bgImage;
     public Image cardImage, screenShotImage, fillbar;
+
+    [Header("Player Score")]
+    public GameObject scoreMoveableParticle;
+    public GameObject dotAnim;
 }
 
 [System.Serializable]
@@ -35,10 +40,10 @@ public class TraditionalPlayerElenemts
     public GameObject character;
     [Header("Player Images")]
     public Image frockImage;
-    public Image bindiImage, bangleImage, dressImage, earingImage, eyeshadeImage, necklaceImage, hairImage, handthingImage, lipsImage, shoesImage, eyebrowImage, blushImage;
+    public Image bindiImage, bangleImage, dressImage, earingImage, eyeshadeImage, necklaceImage, hairImage, lipsImage, shoesImage, eyebrowImage, blushImage, handitemImage;
     [Header("Player Score Text")]
-    public Text voteScore;
-    public Text totalScore;
+    public Text txtPlayerScore;
+    public Text voteScore, totalScore;
     [Header("Player Winner")]
     public GameObject winner;
 }
@@ -50,13 +55,13 @@ public class TraditionalOpponentElenemts
     public GameObject character;
     [Header("Opponent Images")]
     public Image frockImage;
-    public Image bindiImage, bangleImage, dressImage, earingImage, eyeshadeImage, necklaceImage, hairImage, handthingImage, lipsImage, shoesImage, eyebrowImage, blushImage;
+    public Image bindiImage, bangleImage, dressImage, earingImage, eyeshadeImage, necklaceImage, hairImage, lipsImage, shoesImage, eyebrowImage, blushImage, handitemImage;
     [Header("Opponent Bot Images")]
     public Image botInVsPanel;
-    public Image botInVsAnimPanel, botInJudgementalPanel;
+    public Image botInVsAnimPanel, botInGamePlay, botInJudgementalPanel;
     [Header("Opponent Text")]
     public Text nameVsPanel;
-    public Text voteScore, totalScore;
+    public Text txtOppoScore, voteScore, totalScore;
     [Header("Opponent Winner")]
     public GameObject winner;
 }
@@ -64,7 +69,7 @@ public class TraditionalOpponentElenemts
 [System.Serializable]
 public enum TraditionalSelectedItem
 {
-    dress, shoes, bangle, earing, necklace, frock, bindi, handthing, lips, hair, eyeshade, blush, eyebrow
+    dress, frock, bangle, earing, necklace, bindi, handitem, shoes, lips, hair, eyeshade, eyebrow, blush
 }
 
 public class Traditional : MonoBehaviour
@@ -94,11 +99,11 @@ public class Traditional : MonoBehaviour
     public Sprite[] eyeshadeSprites;
     public Sprite[] necklaceSprites;
     public Sprite[] hairSprites;
-    public Sprite[] handthingSprites;
     public Sprite[] lipsSprites;
     public Sprite[] shoesSprites;
     public Sprite[] eyebrowSprites;
     public Sprite[] blushSprites;
+    public Sprite[] handitemSprites;
     public Sprite[] defaultIconSprites;
     public Sprite[] selectedIconSprites;
     [Header("Scroller Btn Image Array")]
@@ -112,13 +117,27 @@ public class Traditional : MonoBehaviour
     private List<ItemInfo> eyeshadeList = new List<ItemInfo>();
     private List<ItemInfo> necklaceList = new List<ItemInfo>();
     private List<ItemInfo> hairList = new List<ItemInfo>();
-    private List<ItemInfo> handthingList = new List<ItemInfo>();
-    private List<ItemInfo> lipsList = new List<ItemInfo>();
-    private List<ItemInfo> shoesList = new List<ItemInfo>();
     private List<ItemInfo> eyebrowList = new List<ItemInfo>();
     private List<ItemInfo> blushList = new List<ItemInfo>();
+    private List<ItemInfo> lipsList = new List<ItemInfo>();
+    private List<ItemInfo> shoesList = new List<ItemInfo>();
+    private List<ItemInfo> handitemList = new List<ItemInfo>();
+    private int[] bangleScroe = { 1965, 3186, 6593, 5914, 1500, 2963, 1479, 7598, 1665, 6985, 2008, 6521, 1240, 1654, 4452};
+    private int[] bindiScroe = { 1865, 1186, 5594, 4915, 2501, 1964, 2478, 6599, 2666, 5986, 3028, 5522, 2241, 2655, 3453, 7564};
+    private int[] handitemScroe = { 2864, 2185, 4593, 6915, 3505, 3965, 3476, 6489, 3676, 5876, 3425, 4523, 1242, 1656};
+    private int[] earingScroe = { 1964, 3175, 2595, 3815, 5805, 3735, 2475, 5487, 3578, 4886, 2455, 3425, 3282, 1546, 2354};
+    private int[] dressScroe = { 1564, 3245, 2845, 1515, 4705, 1635, 2585, 4357, 3065, 4546, 1457, 2415, 5162};
+    private int[] mathapatiScroe = { 1763, 1296, 4584, 3715, 2401, 1744, 2568, 4589, 2054, 5726, 3548, 5128, 2381, 2585, 1472, 6453};
+    private int[] necklaceScroe = { 2874, 2165, 1485, 2415, 4705, 2734, 2185, 2467, 3578, 3526, 1456, 2585, 1272, 2945, 2464 };
+    //private int[] handitemScroe = { 2864, 2185, 4593, 6915, 3505, 3965, 3476, 6489, 3676, 5876, 3425, 4523, 1242, 1656 };
+    private int[] blushScroe = {5481, 2894, 9545, 4784, 8415, 4892, 1654, 8756, 5645, 6156, 3121, 5726, 1161, 1644};
+    private int[] eyebrowScroe = {2154, 8421, 2184, 3214, 8489, 7212, 1848, 4231, 2484, 2156, 4844, 2391, 9681, 0824};
+    private int[] eyeshadeScroe = {2112, 1421, 4821, 5212, 1613, 8264, 1262, 3162, 1142, 3146, 3121, 2984};
+    private int[] hairScroe = {2156, 4121, 5451, 4923, 1842, 1564, 8921, 4215, 4121, 5648, 2165, 2118};
+    private int[] lipsScroe = {1164, 5421, 2174, 3214, 5489, 7252, 1643, 2181, 2974, 2125, 4754, 2381, 1651, 3726};
+    private int[] shoesScroe = {2132, 4842, 1482, 2164, 4512, 1641, 2316, 6213, 2156, 4821, 1568, 4895, 1231, 6123};
     [Header("Default Character Sprites")]
-    public Sprite defaultDress;
+    public Sprite defaultdress;
     public Sprite defaultHair, defaultLips, defaultEyebrow;
     [Header("Sprites")]
     public Sprite bgSprite;
@@ -133,12 +152,10 @@ public class Traditional : MonoBehaviour
     private int selectedIndex;
     [Header("Bool Variable")]
     private bool canShowInterstitial;
-    bool IsDressUp, IsMakeUp, IsJewellery = false;
     [Header("Animator")]
     public Animator categorySlot;
     public Animator voteCard;
     [Header("Particles")]
-    public ParticleSystem itemParticle;
     public GameObject submitPartical;
     public GameObject finalPartical;
     [Header("AudioSources")]
@@ -146,10 +163,15 @@ public class Traditional : MonoBehaviour
     public AudioSource purchaseSFX, itemSelectSFX, vsAnimSFX, winSFX, loseSFX, voteCatSFX, voteGivenSFX;
     public AudioSource[] voiceSounds;
 
+    private int playerScore = 0;
+    private int oppoScore = 0;
     int playerTotalScore, oppoTotalScore = 0;
-    private int frockRank, bindiRank, bangleRank, dressRank, earingRank, eyeshadeRank, necklaceRank, hairRank, handthingRank, lipsRank, shoesRank, eyebrowRank, blushRank;
-    private int oppoDressingRank, oppoMakeupRank, oppoJewelleryRank;
-    private int dressingTotalRank, makeupTotalRank, jewelleryTotalRank;
+
+    private bool IsDressing, IsAccessioress, IsMakeup;
+    private int playerdressScore, playershoesScore, playerbangleScore, playerearingScore, playernecklaceScore, playerfrockScore, playerbindiScore, playerhanditemScore,
+                playerlipsScore, playerhairScore, playereyeshadeScore, playereyebrowScore, playerblushScore = 0;
+    private int oppodressScore, opposhoesScore, oppobangleScore, oppoearingScore, opponecklaceScore, oppofrockScore, oppobindiScore, oppohanditemScore,
+                oppolipsScore, oppohairScore, oppoeyeshadeScore, oppoeyebrowScore, oppoblushScore = 0;
     private enum RewardType
     {
         none, coins, multipulOfTwo, selectionItem
@@ -174,10 +196,6 @@ public class Traditional : MonoBehaviour
         StartCoroutine(AdDelay(45));
         totalCoins.text = SaveData.Instance.Coins.ToString();
         StartCoroutine(findOpponent());
-        OpponentDressing();
-
-        dressRank = hairRank = lipsRank = eyebrowRank = 1;
-        blushRank = frockRank = bindiRank = bangleRank = earingRank = eyeshadeRank = necklaceRank = handthingRank = shoesRank = - 1;
     }
     public void ShowInterstitial()
     {
@@ -312,17 +330,30 @@ public class Traditional : MonoBehaviour
         SetItemIcon(hairList, hairSprites);
         #endregion
 
-        #region Initialing handthing
-        if (uIElements.handthingScroller)
+        #region Initialing blush
+        if (uIElements.blushScroller)
         {
-            var handthingInfo = uIElements.handthingScroller.GetComponentsInChildren<ItemInfo>();
-            for (int i = 0; i < handthingInfo.Length; i++)
+            var blushInfo = uIElements.blushScroller.GetComponentsInChildren<ItemInfo>();
+            for (int i = 0; i < blushInfo.Length; i++)
             {
-                handthingList.Add(handthingInfo[i]);
+                blushList.Add(blushInfo[i]);
             }
         }
-        SetupItemData(SaveData.Instance.TraditionalModeElements.handthing, handthingList);
-        SetItemIcon(handthingList, handthingSprites);
+        SetupItemData(SaveData.Instance.TraditionalModeElements.blush, blushList);
+        SetItemIcon(blushList, blushSprites);
+        #endregion
+
+        #region Initialing eyebrow
+        if (uIElements.eyebrowScroller)
+        {
+            var eyebrowInfo = uIElements.eyebrowScroller.GetComponentsInChildren<ItemInfo>();
+            for (int i = 0; i < eyebrowInfo.Length; i++)
+            {
+                eyebrowList.Add(eyebrowInfo[i]);
+            }
+        }
+        SetupItemData(SaveData.Instance.TraditionalModeElements.eyebrow, eyebrowList);
+        SetItemIcon(eyebrowList, eyebrowSprites);
         #endregion
 
         #region Initialing lips
@@ -350,31 +381,18 @@ public class Traditional : MonoBehaviour
         SetupItemData(SaveData.Instance.TraditionalModeElements.shoes, shoesList);
         SetItemIcon(shoesList, shoesSprites);
         #endregion
-        
-        #region Initialing blush
-        if (uIElements.blushScroller)
+
+        #region Initialing handitem
+        if (uIElements.handitemScroller)
         {
-            var blushInfo = uIElements.blushScroller.GetComponentsInChildren<ItemInfo>();
-            for (int i = 0; i < blushInfo.Length; i++)
+            var handitemInfo = uIElements.handitemScroller.GetComponentsInChildren<ItemInfo>();
+            for (int i = 0; i < handitemInfo.Length; i++)
             {
-                blushList.Add(blushInfo[i]);
+                handitemList.Add(handitemInfo[i]);
             }
         }
-        SetupItemData(SaveData.Instance.TraditionalModeElements.blush, blushList);
-        SetItemIcon(blushList, blushSprites);
-        #endregion
-        
-        #region Initialing eyebrow
-        if (uIElements.eyebrowScroller)
-        {
-            var eyebrowInfo = uIElements.eyebrowScroller.GetComponentsInChildren<ItemInfo>();
-            for (int i = 0; i < eyebrowInfo.Length; i++)
-            {
-                eyebrowList.Add(eyebrowInfo[i]);
-            }
-        }
-        SetupItemData(SaveData.Instance.TraditionalModeElements.eyebrow, eyebrowList);
-        SetItemIcon(eyebrowList, eyebrowSprites);
+        SetupItemData(SaveData.Instance.TraditionalModeElements.handitem, handitemList);
+        SetItemIcon(handitemList, handitemSprites);
         #endregion
 
         Usman_SaveLoad.SaveProgress();
@@ -460,7 +478,7 @@ public class Traditional : MonoBehaviour
         else if (selectedItem == TraditionalSelectedItem.earing)
         {
             CheckSelectedItem(earingList, earingSprites, playerElements.earingImage);
-        }
+        } 
         else if (selectedItem == TraditionalSelectedItem.eyeshade)
         {
             CheckSelectedItem(eyeshadeList, eyeshadeSprites, playerElements.eyeshadeImage);
@@ -472,10 +490,6 @@ public class Traditional : MonoBehaviour
         else if (selectedItem == TraditionalSelectedItem.hair)
         {
             CheckSelectedItem(hairList, hairSprites, playerElements.hairImage);
-        }
-        else if (selectedItem == TraditionalSelectedItem.handthing)
-        {
-            CheckSelectedItem(handthingList, handthingSprites, playerElements.handthingImage);
         }
         else if (selectedItem == TraditionalSelectedItem.lips)
         {
@@ -493,6 +507,10 @@ public class Traditional : MonoBehaviour
         {
             CheckSelectedItem(eyebrowList, eyebrowSprites, playerElements.eyebrowImage);
         }
+        else if (selectedItem == TraditionalSelectedItem.handitem)
+        {
+            CheckSelectedItem(handitemList, handitemSprites, playerElements.handitemImage);
+        }
         GetItemsInfo();
         totalCoins.text = SaveData.Instance.Coins.ToString();
     }
@@ -501,6 +519,7 @@ public class Traditional : MonoBehaviour
     #region CheckSelectedItem
     private void CheckSelectedItem(List<ItemInfo> itemInfoList, Sprite[] itemSprites, Image itemImage)
     {
+        
         rewardType = RewardType.selectionItem;
         if (itemInfoList.Count > selectedIndex)
         {
@@ -528,82 +547,286 @@ public class Traditional : MonoBehaviour
                     {
                         if (itemImage)
                         {
-                           
-                            if (selectedItem == TraditionalSelectedItem.frock)
+
+                            if (selectedItem == TraditionalSelectedItem.dress)
                             {
-                                IsDressUp = true;
-                                playerElements.dressImage.gameObject.SetActive(false);
-                                playerElements.frockImage.gameObject.SetActive(true);
-                                frockRank = GetRank(selectedIndex, frockList.Count);
+                                IsDressing = true;
+                                if (playerdressScore == int.Parse(itemInfoList[selectedIndex].ItemScore.text))
+                                {
+                                    return;
+                                }
+
+                                if (playerdressScore == 0)
+                                {
+                                    playerScore = playerScore + int.Parse(itemInfoList[selectedIndex].ItemScore.text);
+                                    playerdressScore = int.Parse(itemInfoList[selectedIndex].ItemScore.text);
+                                }
+                                else
+                                {
+                                    playerScore = playerScore - playerdressScore;
+                                    playerScore = playerScore + int.Parse(itemInfoList[selectedIndex].ItemScore.text);
+                                    playerdressScore = int.Parse(itemInfoList[selectedIndex].ItemScore.text);
+                                }
+                                
                             }
-                            else if (selectedItem == TraditionalSelectedItem.dress)
-                            {
-                                IsDressUp = true;
-                                playerElements.dressImage.gameObject.SetActive(true);
-                                playerElements.frockImage.gameObject.SetActive(false);
-                                dressRank = GetRank(selectedIndex, dressList.Count);
-                            }
-                            else if (selectedItem == TraditionalSelectedItem.handthing)
-                            {
-                                IsDressUp = true;
-                                handthingRank = GetRank(selectedIndex, handthingList.Count);
-                            }
+
                             else if (selectedItem == TraditionalSelectedItem.shoes)
                             {
-                                IsDressUp = true;
-                                shoesRank = GetRank(selectedIndex, shoesList.Count);
+                                IsDressing = true;
+                                if (playershoesScore == int.Parse(itemInfoList[selectedIndex].ItemScore.text))
+                                {
+                                    return;
+                                }
+
+                                if (playershoesScore == 0)
+                                {
+                                    playerScore = playerScore + int.Parse(itemInfoList[selectedIndex].ItemScore.text);
+                                    playershoesScore = int.Parse(itemInfoList[selectedIndex].ItemScore.text);
+                                }
+                                else
+                                {
+                                    playerScore = playerScore - playershoesScore;
+                                    playerScore = playerScore + int.Parse(itemInfoList[selectedIndex].ItemScore.text);
+                                    playershoesScore = int.Parse(itemInfoList[selectedIndex].ItemScore.text);
+                                }
                             }
-                            else if (selectedItem == TraditionalSelectedItem.bindi)
-                            {
-                                IsJewellery = true;
-                                bindiRank = GetRank(selectedIndex, bindiList.Count);
-                            }
-                            else if (selectedItem == TraditionalSelectedItem.bangle)
-                            {
-                                IsJewellery = true;
-                                bangleRank = GetRank(selectedIndex, bangleList.Count);
-                            }
-                            else if (selectedItem == TraditionalSelectedItem.earing)
-                            {
-                                IsJewellery = true;
-                                earingRank = GetRank(selectedIndex, earingList.Count);
-                            }
+
                             else if (selectedItem == TraditionalSelectedItem.necklace)
                             {
-                                IsJewellery = true;
-                                necklaceRank = GetRank(selectedIndex, necklaceList.Count);
+                                IsAccessioress = true;
+                                if (playernecklaceScore == int.Parse(itemInfoList[selectedIndex].ItemScore.text))
+                                {
+                                    return;
+                                }
+
+                                if (playernecklaceScore == 0)
+                                {
+                                    playerScore = playerScore + int.Parse(itemInfoList[selectedIndex].ItemScore.text);
+                                    playernecklaceScore = int.Parse(itemInfoList[selectedIndex].ItemScore.text);
+                                }
+                                else
+                                {
+                                    playerScore = playerScore - playernecklaceScore;
+                                    playerScore = playerScore + int.Parse(itemInfoList[selectedIndex].ItemScore.text);
+                                    playernecklaceScore = int.Parse(itemInfoList[selectedIndex].ItemScore.text);
+                                }
                             }
+
+                            else if (selectedItem == TraditionalSelectedItem.frock)
+                            {
+                                IsAccessioress = true;
+                                if (playerfrockScore == int.Parse(itemInfoList[selectedIndex].ItemScore.text))
+                                {
+                                    return;
+                                }
+
+                                if (playerfrockScore == 0)
+                                {
+                                    playerScore = playerScore + int.Parse(itemInfoList[selectedIndex].ItemScore.text);
+                                    playerfrockScore = int.Parse(itemInfoList[selectedIndex].ItemScore.text);
+                                }
+                                else
+                                {
+                                    playerScore = playerScore - playerfrockScore;
+                                    playerScore = playerScore + int.Parse(itemInfoList[selectedIndex].ItemScore.text);
+                                    playerfrockScore = int.Parse(itemInfoList[selectedIndex].ItemScore.text);
+                                }
+                            }
+
+                            else if (selectedItem == TraditionalSelectedItem.bindi)
+                            {
+                                IsAccessioress = true;
+                                if (playerbindiScore == int.Parse(itemInfoList[selectedIndex].ItemScore.text))
+                                {
+                                    return;
+                                }
+
+                                if (playerbindiScore == 0)
+                                {
+                                    playerScore = playerScore + int.Parse(itemInfoList[selectedIndex].ItemScore.text);
+                                    playerbindiScore = int.Parse(itemInfoList[selectedIndex].ItemScore.text);
+                                }
+                                else
+                                {
+                                    playerScore = playerScore - playerbindiScore;
+                                    playerScore = playerScore + int.Parse(itemInfoList[selectedIndex].ItemScore.text);
+                                    playerbindiScore = int.Parse(itemInfoList[selectedIndex].ItemScore.text);
+                                }
+                            }
+
+                            else if (selectedItem == TraditionalSelectedItem.bangle)
+                            {
+                                IsAccessioress = true;
+                                playerElements.bangleImage.sprite = bangleSprites[selectedIndex];
+                                if (playerbangleScore == int.Parse(itemInfoList[selectedIndex].ItemScore.text))
+                                {
+                                    return;
+                                }
+
+                                if (playerbangleScore == 0)
+                                {
+                                    playerScore = playerScore + int.Parse(itemInfoList[selectedIndex].ItemScore.text);
+                                    playerbangleScore = int.Parse(itemInfoList[selectedIndex].ItemScore.text);
+                                }
+                                else
+                                {
+                                    playerScore = playerScore - playerbangleScore;
+                                    playerScore = playerScore + int.Parse(itemInfoList[selectedIndex].ItemScore.text);
+                                    playerbangleScore = int.Parse(itemInfoList[selectedIndex].ItemScore.text);
+                                }
+                            }
+
+                            else if (selectedItem == TraditionalSelectedItem.earing)
+                            {
+                                IsAccessioress = true;
+                                if (playerearingScore == int.Parse(itemInfoList[selectedIndex].ItemScore.text))
+                                {
+                                    return;
+                                }
+
+                                if (playerearingScore == 0)
+                                {
+                                    playerScore = playerScore + int.Parse(itemInfoList[selectedIndex].ItemScore.text);
+                                    playerearingScore = int.Parse(itemInfoList[selectedIndex].ItemScore.text);
+                                }
+                                else
+                                {
+                                    playerScore = playerScore - playerearingScore;
+                                    playerScore = playerScore + int.Parse(itemInfoList[selectedIndex].ItemScore.text);
+                                    playerearingScore = int.Parse(itemInfoList[selectedIndex].ItemScore.text);
+                                }
+                            } 
+
+                            else if (selectedItem == TraditionalSelectedItem.handitem)
+                            {
+                                IsAccessioress = true;
+                                if (playerhanditemScore == int.Parse(itemInfoList[selectedIndex].ItemScore.text))
+                                {
+                                    return;
+                                }
+
+                                if (playerhanditemScore == 0)
+                                {
+                                    playerScore = playerScore + int.Parse(itemInfoList[selectedIndex].ItemScore.text);
+                                    playerhanditemScore = int.Parse(itemInfoList[selectedIndex].ItemScore.text);
+                                }
+                                else
+                                {
+                                    playerScore = playerScore - playerhanditemScore;
+                                    playerScore = playerScore + int.Parse(itemInfoList[selectedIndex].ItemScore.text);
+                                    playerhanditemScore = int.Parse(itemInfoList[selectedIndex].ItemScore.text);
+                                }
+                            }
+
                             else if (selectedItem == TraditionalSelectedItem.eyeshade)
                             {
-                                IsMakeUp = true;
-                                eyeshadeRank = GetRank(selectedIndex, eyeshadeList.Count);
+                                IsMakeup = true;
+                                if (playereyeshadeScore == int.Parse(itemInfoList[selectedIndex].ItemScore.text))
+                                {
+                                    return;
+                                }
+
+                                if (playereyeshadeScore == 0)
+                                {
+                                    playerScore = playerScore + int.Parse(itemInfoList[selectedIndex].ItemScore.text);
+                                    playereyeshadeScore = int.Parse(itemInfoList[selectedIndex].ItemScore.text);
+                                }
+                                else
+                                {
+                                    playerScore = playerScore - playereyeshadeScore;
+                                    playerScore = playerScore + int.Parse(itemInfoList[selectedIndex].ItemScore.text);
+                                    playereyeshadeScore = int.Parse(itemInfoList[selectedIndex].ItemScore.text);
+                                }
                             }
-                            else if (selectedItem == TraditionalSelectedItem.hair)
-                            {
-                                IsMakeUp = true;
-                                hairRank = GetRank(selectedIndex, hairList.Count);
-                            }
-                            else if (selectedItem == TraditionalSelectedItem.lips)
-                            {
-                                IsMakeUp = true;
-                                lipsRank = GetRank(selectedIndex, lipsList.Count);
-                            }
-                            else if (selectedItem == TraditionalSelectedItem.eyebrow)
-                            {
-                                IsMakeUp = true;
-                                eyebrowRank = GetRank(selectedIndex, eyebrowList.Count);
-                            }
+
                             else if (selectedItem == TraditionalSelectedItem.blush)
                             {
-                                IsMakeUp = true;
-                                blushRank = GetRank(selectedIndex, blushList.Count);
+                                IsMakeup = true;
+                                if (playerblushScore == int.Parse(itemInfoList[selectedIndex].ItemScore.text))
+                                {
+                                    return;
+                                }
+
+                                if (playerblushScore == 0)
+                                {
+                                    playerScore = playerScore + int.Parse(itemInfoList[selectedIndex].ItemScore.text);
+                                    playerblushScore = int.Parse(itemInfoList[selectedIndex].ItemScore.text);
+                                }
+                                else
+                                {
+                                    playerScore = playerScore - playerblushScore;
+                                    playerScore = playerScore + int.Parse(itemInfoList[selectedIndex].ItemScore.text);
+                                    playerblushScore = int.Parse(itemInfoList[selectedIndex].ItemScore.text);
+                                }
                             }
-                            if (IsDressUp == true && IsMakeUp == true && IsJewellery == true)
+
+                            else if (selectedItem == TraditionalSelectedItem.eyebrow)
                             {
-                                uIElements.previewBtn.GetComponent<Button>().interactable = true;
+                                IsMakeup = true;
+                                if (playereyebrowScore == int.Parse(itemInfoList[selectedIndex].ItemScore.text))
+                                {
+                                    return;
+                                }
+
+                                if (playereyebrowScore == 0)
+                                {
+                                    playerScore = playerScore + int.Parse(itemInfoList[selectedIndex].ItemScore.text);
+                                    playereyebrowScore = int.Parse(itemInfoList[selectedIndex].ItemScore.text);
+                                }
+                                else
+                                {
+                                    playerScore = playerScore - playereyebrowScore;
+                                    playerScore = playerScore + int.Parse(itemInfoList[selectedIndex].ItemScore.text);
+                                    playereyebrowScore = int.Parse(itemInfoList[selectedIndex].ItemScore.text);
+                                }
                             }
+
+                            else if (selectedItem == TraditionalSelectedItem.hair)
+                            {
+                                IsMakeup = true;
+                                if (playerhairScore == int.Parse(itemInfoList[selectedIndex].ItemScore.text))
+                                {
+                                    return;
+                                }
+
+                                if (playerhairScore == 0)
+                                {
+                                    playerScore = playerScore + int.Parse(itemInfoList[selectedIndex].ItemScore.text);
+                                    playerhairScore = int.Parse(itemInfoList[selectedIndex].ItemScore.text);
+                                }
+                                else
+                                {
+                                    playerScore = playerScore - playerhairScore;
+                                    playerScore = playerScore + int.Parse(itemInfoList[selectedIndex].ItemScore.text);
+                                    playerhairScore = int.Parse(itemInfoList[selectedIndex].ItemScore.text);
+                                }
+                            }
+
+                            else if (selectedItem == TraditionalSelectedItem.lips)
+                            {
+                                IsMakeup = true;
+                                if (playerlipsScore == int.Parse(itemInfoList[selectedIndex].ItemScore.text))
+                                {
+                                    return;
+                                }
+
+                                if (playerlipsScore == 0)
+                                {
+                                    playerScore = playerScore + int.Parse(itemInfoList[selectedIndex].ItemScore.text);
+                                    playerlipsScore = int.Parse(itemInfoList[selectedIndex].ItemScore.text);
+                                }
+                                else
+                                {
+                                    playerScore = playerScore - playerlipsScore;
+                                    playerScore = playerScore + int.Parse(itemInfoList[selectedIndex].ItemScore.text);
+                                    playerlipsScore = int.Parse(itemInfoList[selectedIndex].ItemScore.text);
+                                }
+                            }
+
                             voiceSounds[Random.Range(0, voiceSounds.Length)].Play();
-                            if (itemParticle) itemParticle.Play();
+
+                            InstantiateScoreParticle(itemInfoList);
+                            
                             itemImage.gameObject.SetActive(false);
                             itemImage.gameObject.SetActive(true);
                             itemImage.sprite = itemSprites[selectedIndex];
@@ -617,8 +840,28 @@ public class Traditional : MonoBehaviour
     }
     #endregion
 
+    private void InstantiateScoreParticle(List<ItemInfo> itemInfoList)
+    {
+        var scoreParticle = Instantiate(uIElements.scoreMoveableParticle, itemInfoList[selectedIndex].gameObject.transform);
+        scoreParticle.transform.localPosition = Vector3.zero;
+        scoreParticle.transform.parent = null;
+        scoreParticle.SetActive(true);
+    }
+
+    public void AddPlayerScore()
+    {
+        StartCoroutine(scaleScroe());
+        playerElements.txtPlayerScore.text = playerScore.ToString();
+    }
+
+    IEnumerator scaleScroe()
+    {
+        iTween.ScaleFrom(playerElements.txtPlayerScore.gameObject, iTween.Hash("x", 1.5f, "y", 1.5f, "time", 0.3f, "easetype", iTween.EaseType.easeOutBack));
+        yield return new WaitForSeconds(0.3f);
+    }
+
     #region ItemStatus
-    public void ItemStatus(int itemIndex)
+        public void ItemStatus(int itemIndex)
     {
         categoryBtn[itemIndex].transform.GetChild(1).GetComponent<Image>().sprite = greenSprite;
         categoryBtn[itemIndex].transform.GetChild(1).GetChild(0).gameObject.SetActive(true);
@@ -648,7 +891,7 @@ public class Traditional : MonoBehaviour
         else if (selectedItem == TraditionalSelectedItem.earing)
         {
             coinUnlockItem(earingList);
-        }
+        }     
         else if (selectedItem == TraditionalSelectedItem.eyeshade)
         {
             coinUnlockItem(eyeshadeList);
@@ -661,10 +904,6 @@ public class Traditional : MonoBehaviour
         {
             coinUnlockItem(hairList);
         }
-        else if (selectedItem == TraditionalSelectedItem.handthing)
-        {
-            coinUnlockItem(handthingList);
-        }
         else if (selectedItem == TraditionalSelectedItem.lips)
         {
             coinUnlockItem(lipsList);
@@ -673,13 +912,13 @@ public class Traditional : MonoBehaviour
         {
             coinUnlockItem(shoesList);
         }
-        else if (selectedItem == TraditionalSelectedItem.blush)
-        {
-            coinUnlockItem(blushList);
-        }
         else if (selectedItem == TraditionalSelectedItem.eyebrow)
         {
             coinUnlockItem(eyebrowList);
+        }
+        else if (selectedItem == TraditionalSelectedItem.handitem)
+        {
+            coinUnlockItem(handitemList);
         }
         GetItemsInfo();
         totalCoins.text = SaveData.Instance.Coins.ToString();
@@ -712,65 +951,67 @@ public class Traditional : MonoBehaviour
     {
         if (selectedItem == TraditionalSelectedItem.frock)
         {
-            SetItemsInfo(frockList);
+            SetItemsInfo(frockList, mathapatiScroe);
         }
         else if (selectedItem == TraditionalSelectedItem.bindi)
         {
-            SetItemsInfo(bindiList);
+            SetItemsInfo(bindiList, bindiScroe);
         }
         else if (selectedItem == TraditionalSelectedItem.bangle)
         {
-            SetItemsInfo(bangleList);
+            SetItemsInfo(bangleList, bangleScroe);
         }
         if (selectedItem == TraditionalSelectedItem.dress)
         {
-            SetItemsInfo(dressList);
+            SetItemsInfo(dressList, dressScroe);
         }
         else if (selectedItem == TraditionalSelectedItem.earing)
         {
-            SetItemsInfo(earingList);
+            SetItemsInfo(earingList, earingScroe);
         }
         else if (selectedItem == TraditionalSelectedItem.eyeshade)
         {
-            SetItemsInfo(eyeshadeList);
+            SetItemsInfo(eyeshadeList, eyeshadeScroe);
         }
         else if (selectedItem == TraditionalSelectedItem.necklace)
         {
-            SetItemsInfo(necklaceList);
+            SetItemsInfo(necklaceList, necklaceScroe);
         }
         else if (selectedItem == TraditionalSelectedItem.hair)
         {
-            SetItemsInfo(hairList);
-        }
-        else if (selectedItem == TraditionalSelectedItem.handthing)
-        {
-            SetItemsInfo(handthingList);
+            SetItemsInfo(hairList, hairScroe);
         }
         else if (selectedItem == TraditionalSelectedItem.lips)
         {
-            SetItemsInfo(lipsList);
+            SetItemsInfo(lipsList, lipsScroe);
         }
         else if (selectedItem == TraditionalSelectedItem.shoes)
         {
-            SetItemsInfo(shoesList);
+            SetItemsInfo(shoesList, shoesScroe);
         }
         else if (selectedItem == TraditionalSelectedItem.blush)
         {
-            SetItemsInfo(blushList);
+            SetItemsInfo(blushList, blushScroe);
         }
         else if (selectedItem == TraditionalSelectedItem.eyebrow)
         {
-            SetItemsInfo(eyebrowList);
+            SetItemsInfo(eyebrowList, eyebrowScroe);
+        }
+        else if (selectedItem == TraditionalSelectedItem.handitem)
+        {
+            SetItemsInfo(handitemList, handitemScroe);
         }
     }
     #endregion
 
     #region SetItemsInfo
-    private void SetItemsInfo(List<ItemInfo> _ItemInfo)
+    private void SetItemsInfo(List<ItemInfo> _ItemInfo,int[] itemScore)
     {
         if (_ItemInfo == null) return;
         for (int i = 0; i < _ItemInfo.Count; i++)
         {
+            _ItemInfo[i].ItemScore.text = itemScore[i].ToString();
+           
             if (_ItemInfo[i].btnBG)
             {
                 if (i == selectedIndex)
@@ -823,33 +1064,6 @@ public class Traditional : MonoBehaviour
     }
     #endregion
 
-    #region RankingFormula
-    private int GetRank(int selectedCard, int totalItems)
-    {
-        int rankDivider = 0;
-        rankDivider = totalItems / 10;
-        if (rankDivider == 0)
-        {
-            rankDivider += 1;
-        }
-        if (selectedCard / rankDivider < 10)
-        {
-            return (selectedCard / rankDivider) + 1;
-        }
-        else
-        {
-            return 10;
-        }
-    }
-    private int GetRankValue(int _Rank)
-    {
-        if (_Rank > -1)
-            return _Rank;
-        else
-            return 0;
-    }
-    #endregion
-
     #region SelectedCatagory
     private void DisableScrollers()
     {
@@ -867,11 +1081,11 @@ public class Traditional : MonoBehaviour
         uIElements.eyeshadeScroller.SetActive(false);
         uIElements.necklaceScroller.SetActive(false);
         uIElements.hairScroller.SetActive(false);
-        uIElements.handthingScroller.SetActive(false);
         uIElements.lipsScroller.SetActive(false);
         uIElements.shoesScroller.SetActive(false);
         uIElements.blushScroller.SetActive(false);
         uIElements.eyebrowScroller.SetActive(false);
+        uIElements.handitemScroller.SetActive(false);
     }
     public void SelectedCatagory(int index)
     {
@@ -899,6 +1113,12 @@ public class Traditional : MonoBehaviour
             playerCharacterMover.Move(new Vector3(90, 0, 0), 0.5f, true, false);
             selectedItem = TraditionalSelectedItem.bangle;
             uIElements.bangleScroller.SetActive(true);
+        }
+        else if (index == (int)TraditionalSelectedItem.handitem)
+        {
+            playerCharacterMover.Move(new Vector3(90, 0, 0), 0.5f, true, false);
+            selectedItem = TraditionalSelectedItem.handitem;
+            uIElements.handitemScroller.SetActive(true);
         }
         else if (index == (int)TraditionalSelectedItem.dress)
         {
@@ -930,18 +1150,12 @@ public class Traditional : MonoBehaviour
             selectedItem = TraditionalSelectedItem.hair;
             uIElements.hairScroller.SetActive(true);
         }
-        else if (index == (int)TraditionalSelectedItem.handthing)
-        {
-            playerCharacterMover.Move(new Vector3(90, 0, 0), 0.5f, true, false);
-            selectedItem = TraditionalSelectedItem.handthing;
-            uIElements.handthingScroller.SetActive(true);
-        }
         else if (index == (int)TraditionalSelectedItem.lips)
         {
             playerCharacterMover.Move(new Vector3(20, -600, -1000), 0.5f, true, false);
             selectedItem = TraditionalSelectedItem.lips;
             uIElements.lipsScroller.SetActive(true);
-        }
+        }   
         else if (index == (int)TraditionalSelectedItem.blush)
         {
             playerCharacterMover.Move(new Vector3(20, -600, -1000), 0.5f, true, false);
@@ -999,10 +1213,6 @@ public class Traditional : MonoBehaviour
         {
             SaveData.Instance.TraditionalModeElements.hair[selectedIndex] = false;
         }
-        else if (selectedItem == TraditionalSelectedItem.handthing)
-        {
-            SaveData.Instance.TraditionalModeElements.handthing[selectedIndex] = false;
-        }
         else if (selectedItem == TraditionalSelectedItem.lips)
         {
             SaveData.Instance.TraditionalModeElements.lips[selectedIndex] = false;
@@ -1018,6 +1228,10 @@ public class Traditional : MonoBehaviour
         else if (selectedItem == TraditionalSelectedItem.eyebrow)
         {
             SaveData.Instance.TraditionalModeElements.eyebrow[selectedIndex] = false;
+        }
+        else if (selectedItem == TraditionalSelectedItem.handitem)
+        {
+            SaveData.Instance.TraditionalModeElements.handitem[selectedIndex] = false;
         }
         totalCoins.text = SaveData.Instance.Coins.ToString();
         Usman_SaveLoad.SaveProgress();
@@ -1041,7 +1255,7 @@ public class Traditional : MonoBehaviour
         }
         else if (selectedItem == TraditionalSelectedItem.dress)
         {
-            playerElements.dressImage.sprite = defaultDress;
+            playerElements.dressImage.sprite = defaultdress;
         }
         else if (selectedItem == TraditionalSelectedItem.earing)
         {
@@ -1059,25 +1273,25 @@ public class Traditional : MonoBehaviour
         {
             playerElements.hairImage.sprite = defaultHair;
         }
-        else if (selectedItem == TraditionalSelectedItem.handthing)
-        {
-            playerElements.handthingImage.gameObject.SetActive(false);
-        }
         else if (selectedItem == TraditionalSelectedItem.lips)
         {
             playerElements.lipsImage.sprite = defaultLips;
         }
-        else if (selectedItem == TraditionalSelectedItem.eyebrow)
+        else if (selectedItem == TraditionalSelectedItem.shoes)
         {
-            playerElements.eyebrowImage.sprite = defaultEyebrow;
+            playerElements.shoesImage.gameObject.SetActive(false);
         }
         else if (selectedItem == TraditionalSelectedItem.blush)
         {
             playerElements.blushImage.gameObject.SetActive(false);
         }
-        else if (selectedItem == TraditionalSelectedItem.shoes)
+        else if (selectedItem == TraditionalSelectedItem.handitem)
         {
-            playerElements.shoesImage.gameObject.SetActive(false);
+            playerElements.handitemImage.gameObject.SetActive(false);
+        }
+        else if (selectedItem == TraditionalSelectedItem.eyebrow)
+        {
+            playerElements.eyebrowImage.sprite = defaultEyebrow;
         }
         ItemStatusOff((int)selectedItem);
     }
@@ -1118,25 +1332,19 @@ public class Traditional : MonoBehaviour
         }
         GetItemsInfo();
     }
-    //public void BGChange()
-    //{
-    //    if (bgSprites.Length > bgIndex)
-    //    {
-    //        print("abc");
-    //        if (bgSprites[bgIndex])
-    //        {
-    //            uIElements.bgImage.sprite = bgSprites[bgIndex];
-    //            bgIndex++;
-    //            if (bgIndex >= bgSprites.Length) bgIndex = 0;
-    //        }
-    //    }
-    //}
     #endregion
 
     #region BtnsTask
     public void Preview()
     {
-        StartCoroutine(preview());
+        if (IsDressing == true && IsMakeup == true && IsAccessioress == true)
+        {
+            StartCoroutine(preview());
+        }
+        else
+        {
+            uIElements.warningPopUp.SetActive(true);
+        }
     }
 
     public void SubmitLook()
@@ -1159,6 +1367,7 @@ public class Traditional : MonoBehaviour
         uIElements.dressUpBtn.SetActive(false);
         uIElements.makeUpBtn.SetActive(true);
     }
+
     public void Play(string str)
     {
         finalPartical.gameObject.SetActive(false);
@@ -1166,6 +1375,7 @@ public class Traditional : MonoBehaviour
         uIElements.loadingPanel.SetActive(true);
         StartCoroutine(LoadingScene(str));
     }
+
     public void StartGame()
     {
         uIElements.vsPanel.SetActive(false);
@@ -1192,7 +1402,7 @@ public class Traditional : MonoBehaviour
             uIElements.cardImage.sprite = cardSprites[Random.Range(0, cardSprites.Length)];
             yield return new WaitForSeconds(0.1f);
         }
-        uIElements.cardImage.sprite = cardSprites[1];
+        uIElements.cardImage.sprite = cardSprites[0];
 
         yield return new WaitForSeconds(0.5f);
         for (int i = 0; i < Random.Range(10, 25); i++)
@@ -1202,6 +1412,7 @@ public class Traditional : MonoBehaviour
             oppoElements.botInVsPanel.GetComponent<AudioSource>().Play();
             oppoElements.botInVsPanel.sprite = botSprites[Random.Range(0, botSprites.Length)];
             oppoElements.botInVsAnimPanel.sprite = oppoElements.botInVsPanel.sprite;
+            oppoElements.botInGamePlay.sprite = oppoElements.botInVsPanel.sprite;
             oppoElements.botInJudgementalPanel.sprite = oppoElements.botInVsPanel.sprite;
             yield return new WaitForSeconds(0.1f);
         }
@@ -1214,7 +1425,6 @@ public class Traditional : MonoBehaviour
             oppoElements.nameVsPanel.gameObject.SetActive(true);
             oppoElements.nameVsPanel.GetComponent<AudioSource>().Play();
             oppoElements.nameVsPanel.text = Name.ToString();
-            //oppoElements.nameVsAnimPanel.text = oppoElements.nameVsPanel.text;
             yield return new WaitForSeconds(0.1f);
         }
         yield return new WaitForSeconds(0.5f);
@@ -1228,12 +1438,17 @@ public class Traditional : MonoBehaviour
         uIElements.bgImage.sprite = submitPanelBgSprite;
         uIElements.submitPanel.SetActive(true);
         uIElements.allScroller.SetActive(false);
+        uIElements.scoreSlot.SetActive(false);
         uIElements.coinSlot.SetActive(false);
         playerCharacterMover.Move(new Vector3(0, -300, -800), 0.7f, true, false);
         yield return new WaitForSeconds(0.68f);
         playerCharacterMover.Move(new Vector3(0, 200, -800), 0.7f, true, false);
         yield return new WaitForSeconds(0.68f);
         playerCharacterMover.Move(new Vector3(0, 88, 0), 0.7f, true, false);
+        yield return new WaitForSeconds(0.5f);
+        if (winSFX) winSFX.Play();
+        submitPartical.SetActive(true);
+        
     }
 
     IEnumerator submitlook()
@@ -1248,6 +1463,10 @@ public class Traditional : MonoBehaviour
         yield return new WaitForSeconds(0.3f);
         oppoCharacterMover.Move(new Vector3(290, 63f, 0), 0.7f, true, false);
         SaveData.Instance.vsMode = false;
+        yield return new WaitForSeconds(0.2f);
+        uIElements.scoreSlot.SetActive(true);
+        yield return new WaitForSeconds(0.1f);
+        OpponentDressing();
         yield return new WaitForSeconds(0.1f);
         StartCoroutine(startComparing());
 
@@ -1440,184 +1659,178 @@ public class Traditional : MonoBehaviour
     {
         int randomIndex = 0;
 
-        if (dressRank > -1)
+        #region dress
+        randomIndex = Random.Range(0, dressList.Count);
+        if (dressList[randomIndex] && oppoElements.dressImage)
         {
-            randomIndex = Random.Range(0, dressList.Count);
-            if (dressList[randomIndex] && oppoElements.dressImage)
-            {
-                oppoElements.dressImage.gameObject.SetActive(true);
-                oppoElements.frockImage.gameObject.SetActive(false);
-                oppoElements.dressImage.sprite = dressSprites[randomIndex];
-            }
-            dressingTotalRank += 10;
-            oppoDressingRank += GetRank(randomIndex, dressList.Count);
+            oppoElements.dressImage.gameObject.SetActive(true);
+            oppoElements.dressImage.sprite = dressSprites[randomIndex];
         }
+         
+        oppoScore = oppoScore + int.Parse(dressList[randomIndex].ItemScore.text);
+        oppodressScore = int.Parse(dressList[randomIndex].ItemScore.text);
+        #endregion
 
-        if (frockRank > -1)
+        #region shoes
+        randomIndex = Random.Range(0, shoesList.Count);
+        if (shoesList[randomIndex] && oppoElements.shoesImage)
         {
-            randomIndex = Random.Range(0, frockList.Count);
-            if (frockList[randomIndex] && oppoElements.frockImage)
-            {
-                oppoElements.frockImage.gameObject.SetActive(true);
-                oppoElements.dressImage.gameObject.SetActive(false);
-                oppoElements.frockImage.sprite = frockSprites[randomIndex];
-            }
-            dressingTotalRank += 10;
-            oppoDressingRank += GetRank(randomIndex, frockList.Count);
+            oppoElements.shoesImage.gameObject.SetActive(true);
+            oppoElements.shoesImage.sprite = shoesSprites[randomIndex];
         }
+        oppoScore = oppoScore + int.Parse(shoesList[randomIndex].ItemScore.text);
+        opposhoesScore = int.Parse(shoesList[randomIndex].ItemScore.text);
+        #endregion
 
-        if (handthingRank > -1)
+        #region eyeshade
+        randomIndex = Random.Range(0, eyeshadeList.Count);
+        if (eyeshadeList[randomIndex] && oppoElements.eyeshadeImage)
         {
-            randomIndex = Random.Range(0, handthingList.Count);
-            if (handthingList[randomIndex] && oppoElements.handthingImage)
-            {
-                oppoElements.handthingImage.gameObject.SetActive(true);
-                oppoElements.handthingImage.sprite = handthingSprites[randomIndex];
-            }
-            dressingTotalRank += 10;
-            oppoDressingRank += GetRank(randomIndex, handthingList.Count);
+            oppoElements.eyeshadeImage.gameObject.SetActive(true);
+            oppoElements.eyeshadeImage.sprite = eyeshadeSprites[randomIndex];
         }
+        oppoScore = oppoScore + int.Parse(eyeshadeList[randomIndex].ItemScore.text);
+        oppoeyeshadeScore = int.Parse(eyeshadeList[randomIndex].ItemScore.text);
+        #endregion
 
-        if (shoesRank > -1)
+        #region hair
+        randomIndex = Random.Range(0, hairList.Count);
+        if (hairList[randomIndex] && oppoElements.hairImage)
         {
-            randomIndex = Random.Range(0, shoesList.Count);
-            if (shoesList[randomIndex] && oppoElements.shoesImage)
-            {
-                oppoElements.shoesImage.gameObject.SetActive(true);
-                oppoElements.shoesImage.sprite = shoesSprites[randomIndex];
-            }
-            dressingTotalRank += 10;
-            oppoDressingRank += GetRank(randomIndex, shoesList.Count);
+            oppoElements.hairImage.gameObject.SetActive(true);
+            oppoElements.hairImage.sprite = hairSprites[randomIndex];
         }
+        oppoScore = oppoScore + int.Parse(hairList[randomIndex].ItemScore.text);
+        oppohairScore = int.Parse(hairList[randomIndex].ItemScore.text);
+        #endregion
 
-        if (hairRank > -1)
+        #region lips
+        randomIndex = Random.Range(0, lipsList.Count);
+        if (lipsList[randomIndex] && oppoElements.lipsImage)
         {
-            randomIndex = Random.Range(0, hairList.Count);
-            if (hairList[randomIndex] && oppoElements.hairImage)
-            {
-                oppoElements.hairImage.gameObject.SetActive(true);
-                oppoElements.hairImage.sprite = hairSprites[randomIndex];
-            }
-            makeupTotalRank += 10;
-            oppoMakeupRank += GetRank(randomIndex, hairList.Count);
+            oppoElements.lipsImage.gameObject.SetActive(true);
+            oppoElements.lipsImage.sprite = lipsSprites[randomIndex];
         }
+        oppoScore = oppoScore + int.Parse(lipsList[randomIndex].ItemScore.text);
+        oppolipsScore = int.Parse(lipsList[randomIndex].ItemScore.text);
+        #endregion
 
-        if (lipsRank > -1)
+        #region blush
+        randomIndex = Random.Range(0, blushList.Count);
+        if (blushList[randomIndex] && oppoElements.blushImage)
         {
-            randomIndex = Random.Range(0, lipsList.Count);
-            if (lipsList[randomIndex] && oppoElements.lipsImage)
-            {
-                oppoElements.lipsImage.gameObject.SetActive(true);
-                oppoElements.lipsImage.sprite = lipsSprites[randomIndex];
-            }
-            makeupTotalRank += 10;
-            oppoMakeupRank += GetRank(randomIndex, lipsList.Count);
+            oppoElements.blushImage.gameObject.SetActive(true);
+            oppoElements.blushImage.sprite = blushSprites[randomIndex];
         }
+        oppoScore = oppoScore + int.Parse(blushList[randomIndex].ItemScore.text);
+        oppoblushScore = int.Parse(blushList[randomIndex].ItemScore.text);
+        #endregion
 
-        if (eyeshadeRank > -1)
+        #region eybrow
+        randomIndex = Random.Range(0, eyebrowList.Count);
+        if (eyebrowList[randomIndex] && oppoElements.eyebrowImage)
         {
-            randomIndex = Random.Range(0, eyeshadeList.Count);
-            if (eyeshadeList[randomIndex] && oppoElements.eyeshadeImage)
-            {
-                oppoElements.eyeshadeImage.gameObject.SetActive(true);
-                oppoElements.eyeshadeImage.sprite = eyeshadeSprites[randomIndex];
-            }
-            makeupTotalRank += 10;
-            oppoMakeupRank += GetRank(randomIndex, eyeshadeList.Count);
+            oppoElements.eyebrowImage.gameObject.SetActive(true);
+            oppoElements.eyebrowImage.sprite = eyebrowSprites[randomIndex];
         }
-        
-        if (blushRank > -1)
-        {
-            randomIndex = Random.Range(0, blushList.Count);
-            if (blushList[randomIndex] && oppoElements.blushImage)
-            {
-                oppoElements.blushImage.gameObject.SetActive(true);
-                oppoElements.blushImage.sprite = blushSprites[randomIndex];
-            }
-            makeupTotalRank += 10;
-            oppoMakeupRank += GetRank(randomIndex, eyeshadeList.Count);
-        }
-        
-        if (eyebrowRank > -1)
-        {
-            randomIndex = Random.Range(0, eyebrowList.Count);
-            if (eyebrowList[randomIndex] && oppoElements.eyebrowImage)
-            {
-                oppoElements.eyebrowImage.gameObject.SetActive(true);
-                oppoElements.eyebrowImage.sprite = eyebrowSprites[randomIndex];
-            }
-            makeupTotalRank += 10;
-            oppoMakeupRank += GetRank(randomIndex, eyebrowList.Count);
-        }
+        oppoScore = oppoScore + int.Parse(eyebrowList[randomIndex].ItemScore.text);
+        oppoeyebrowScore = int.Parse(eyebrowList[randomIndex].ItemScore.text);
+        #endregion
 
-        if (earingRank > -1)
+        #region earing
+        randomIndex = Random.Range(0, earingList.Count);
+        if (earingList[randomIndex] && oppoElements.earingImage)
         {
-            randomIndex = Random.Range(0, earingList.Count);
-            if (earingList[randomIndex] && oppoElements.earingImage)
-            {
-                oppoElements.earingImage.gameObject.SetActive(true);
-                oppoElements.earingImage.sprite = earingSprites[randomIndex];
-            }
-            jewelleryTotalRank += 10;
-            oppoJewelleryRank += GetRank(randomIndex, earingList.Count);
+            oppoElements.earingImage.gameObject.SetActive(true);
+            oppoElements.earingImage.sprite = earingSprites[randomIndex];
         }
+        oppoScore = oppoScore + int.Parse(earingList[randomIndex].ItemScore.text);
+        oppoearingScore = int.Parse(earingList[randomIndex].ItemScore.text);
+        #endregion
 
-        if (bangleRank > -1)
+        #region frock
+        randomIndex = Random.Range(0, frockList.Count);
+        if (frockList[randomIndex] && oppoElements.frockImage)
         {
-            randomIndex = Random.Range(0, bangleList.Count);
-            if (bangleList[randomIndex] && oppoElements.bangleImage)
-            {
-                oppoElements.bangleImage.gameObject.SetActive(true);
-                oppoElements.bangleImage.sprite = bangleSprites[randomIndex];
-            }
-            jewelleryTotalRank += 10;
-            oppoJewelleryRank += GetRank(randomIndex, bangleList.Count);
+            oppoElements.frockImage.gameObject.SetActive(true);
+            oppoElements.frockImage.sprite = frockSprites[randomIndex];
         }
+        oppoScore = oppoScore + int.Parse(frockList[randomIndex].ItemScore.text);
+        oppofrockScore = int.Parse(frockList[randomIndex].ItemScore.text);
+        #endregion
 
-        if (bindiRank > -1)
+        #region bangle
+        randomIndex = Random.Range(0, bangleList.Count);
+        if (bangleList[randomIndex] && oppoElements.bangleImage)
         {
-            randomIndex = Random.Range(0, bindiList.Count);
-            if (bindiList[randomIndex] && oppoElements.bindiImage)
-            {
-                oppoElements.bindiImage.gameObject.SetActive(true);
-                oppoElements.bindiImage.sprite = bindiSprites[randomIndex];
-            }
-            jewelleryTotalRank += 10;
-            oppoJewelleryRank += GetRank(randomIndex, bindiList.Count);
+            oppoElements.bangleImage.gameObject.SetActive(true);
+            oppoElements.bangleImage.sprite = bangleSprites[randomIndex];
         }
+        oppoScore = oppoScore + int.Parse(bangleList[randomIndex].ItemScore.text);
+        oppobangleScore = int.Parse(bangleList[randomIndex].ItemScore.text);
+        #endregion
 
-        if (necklaceRank > -1)
+        #region bindi
+        randomIndex = Random.Range(0, bindiList.Count);
+        if (bindiList[randomIndex] && oppoElements.bindiImage)
         {
-            randomIndex = Random.Range(0, necklaceList.Count);
-            if (necklaceList[randomIndex] && oppoElements.necklaceImage)
-            {
-                oppoElements.necklaceImage.gameObject.SetActive(true);
-                oppoElements.necklaceImage.sprite = necklaceSprites[randomIndex];
-            }
-            jewelleryTotalRank += 10;
-            oppoJewelleryRank += GetRank(randomIndex, necklaceList.Count);
-        }        
+            oppoElements.bindiImage.gameObject.SetActive(true);
+            oppoElements.bindiImage.sprite = bindiSprites[randomIndex];
+        }
+        oppoScore = oppoScore + int.Parse(bindiList[randomIndex].ItemScore.text);
+        oppobindiScore = int.Parse(bindiList[randomIndex].ItemScore.text);
+        #endregion
+
+        #region necklace
+        randomIndex = Random.Range(0, necklaceList.Count);
+        if (necklaceList[randomIndex] && oppoElements.necklaceImage)
+        {
+            oppoElements.necklaceImage.gameObject.SetActive(true);
+            oppoElements.necklaceImage.sprite = necklaceSprites[randomIndex];
+        }
+        oppoScore = oppoScore + int.Parse(necklaceList[randomIndex].ItemScore.text);
+        opponecklaceScore = int.Parse(necklaceList[randomIndex].ItemScore.text);
+        #endregion
+
+        #region handitem
+        randomIndex = Random.Range(0, handitemList.Count);
+        if (handitemList[randomIndex] && oppoElements.handitemImage)
+        {
+            oppoElements.handitemImage.gameObject.SetActive(true);
+            oppoElements.handitemImage.sprite = handitemSprites[randomIndex];
+        }
+        oppoScore = oppoScore + int.Parse(handitemList[randomIndex].ItemScore.text);
+        oppohanditemScore = int.Parse(handitemList[randomIndex].ItemScore.text);
+        #endregion
     }
     #endregion
 
     #region Comparing
     IEnumerator startComparing()
     {
-        int totalRank = 0;
+        int playerdressupTotal, playermakeupTotal, playeraccessioresTotal;
+        int oppodressupTotal, oppomakeupTotal, oppoaccessioresTotal;
         int playerTotal = 0, oppoTotal = 0;
-        yield return new WaitForSeconds(1);
+        yield return new WaitForSeconds(2);
+        uIElements.dotAnim.SetActive(false);
+        oppoElements.txtOppoScore.gameObject.SetActive(true);
         categorySlot.gameObject.SetActive(true);
         categoriesText.text = "DressUp";
         if (voteCatSFX) voteCatSFX.Play();
         categorySlot.Play(0);
-        voteCard.Play(0);
+        //player
         yield return new WaitForSeconds(2f);
-        totalRank = GetRankValue(dressRank) + GetRankValue(frockRank) + GetRankValue(shoesRank) + GetRankValue(handthingRank);
-        playerTotal += totalRank;
-        playerElements.voteScore.text = GetRank(totalRank, dressingTotalRank).ToString();
-        oppoElements.voteScore.text = GetRank(oppoDressingRank, dressingTotalRank).ToString();
+        playerdressupTotal = playerdressScore + playershoesScore + playerfrockScore;
+        playerTotal += playerdressupTotal;
+        playerElements.voteScore.text = playerdressupTotal.ToString();
+        //oppo
+        oppodressupTotal = oppodressScore + opposhoesScore + oppofrockScore;
+        oppoTotal += oppodressupTotal;
+        oppoElements.voteScore.text = oppodressupTotal.ToString();
+
         voteCard.gameObject.SetActive(true);
         if (voteGivenSFX) voteGivenSFX.Play();
+        voteCard.Play(0);
         TotalScoring();
 
         yield return new WaitForSeconds(2f);
@@ -1625,28 +1838,38 @@ public class Traditional : MonoBehaviour
         if (voteCatSFX) voteCatSFX.Play();
         categorySlot.Play(0);
         voteCard.Play(0);
+        //player
         yield return new WaitForSeconds(1f);
-        totalRank = GetRankValue(eyeshadeRank) + GetRankValue(lipsRank) + GetRankValue(hairRank) + GetRankValue(blushRank) + GetRankValue(eyebrowRank);
-        playerTotal += totalRank;
-        playerElements.voteScore.text = GetRank(totalRank, makeupTotalRank).ToString();
-        oppoElements.voteScore.text = GetRank(oppoMakeupRank, makeupTotalRank).ToString();
+        playermakeupTotal = playereyeshadeScore + playerlipsScore + playerhairScore + playerblushScore + playereyebrowScore;
+        playerTotal += playermakeupTotal;
+        playerElements.voteScore.text = playermakeupTotal.ToString();
+        //oppo
+        oppomakeupTotal = oppoeyeshadeScore + oppolipsScore + oppohairScore + oppoblushScore + oppoeyebrowScore;
+        oppoTotal += oppomakeupTotal;
+        oppoElements.voteScore.text = oppomakeupTotal.ToString();
+
         if (voteGivenSFX) voteGivenSFX.Play();
         TotalScoring();
 
+
         yield return new WaitForSeconds(2f);
-        categoriesText.text = "Jewellery";
+        categoriesText.text = "Accessiores";
         if (voteCatSFX) voteCatSFX.Play();
         categorySlot.Play(0);
         voteCard.Play(0);
+        //player
         yield return new WaitForSeconds(1f);
-        totalRank = GetRankValue(earingRank) + GetRankValue(bangleRank) + GetRankValue(necklaceRank) + GetRankValue(bindiRank);
-        playerTotal += totalRank;
-        playerElements.voteScore.text = GetRank(totalRank, jewelleryTotalRank).ToString();
-        oppoElements.voteScore.text = GetRank(oppoJewelleryRank, jewelleryTotalRank).ToString();
+        playeraccessioresTotal = playerearingScore + playerbindiScore + playernecklaceScore + playerbangleScore + playerhanditemScore;
+        playerTotal += playeraccessioresTotal;
+        playerElements.voteScore.text = playeraccessioresTotal.ToString();
+        //oppo
+        oppoaccessioresTotal = oppoearingScore + oppobindiScore + opponecklaceScore + oppobangleScore + oppohanditemScore;
+        oppoTotal += oppoaccessioresTotal;
+        oppoElements.voteScore.text = oppoaccessioresTotal.ToString();
+
         if (voteGivenSFX) voteGivenSFX.Play();
         TotalScoring();
 
-        oppoTotal = oppoDressingRank + oppoJewelleryRank + oppoMakeupRank;
         yield return new WaitForSeconds(2);
         categorySlot.gameObject.SetActive(false);
         voteCard.gameObject.SetActive(false);
@@ -1741,6 +1964,7 @@ public class Traditional : MonoBehaviour
     public void TakeScreenShot()
     {
         uIElements.screenShotImage.transform.parent.localScale = Vector3.one;
+        //uIElements.previewPanel.SetActive(false);
         StartCoroutine(takeScreenShot());
     }
     IEnumerator takeScreenShot()
@@ -1755,6 +1979,7 @@ public class Traditional : MonoBehaviour
         {
             uIElements.screenShotImage.sprite = sprite;
             uIElements.screenShotPanel.SetActive(true);
+            //DownloadImage();
         }
         _Taxture = _Texture;
         Invoke("DownloadImage", 0.8f);
