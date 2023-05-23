@@ -1687,28 +1687,34 @@ public class Traditional : MonoBehaviour
         int randomIndex = 0;
 
         #region dress
-        randomIndex = Random.Range(0, dressList.Count);
-        if (dressList[randomIndex] && oppoElements.dressImage)
+        if (playerdressScore > 0)
         {
-            oppoElements.dressImage.gameObject.SetActive(true);
-            oppoElements.frockImage.gameObject.SetActive(false);
-            oppoElements.dressImage.sprite = dressSprites[randomIndex];
+            randomIndex = Random.Range(0, dressList.Count);
+            if (dressList[randomIndex] && oppoElements.dressImage)
+            {
+                oppoElements.dressImage.gameObject.SetActive(true);
+                oppoElements.frockImage.gameObject.SetActive(false);
+                oppoElements.dressImage.sprite = dressSprites[randomIndex];
+            }
+
+            oppoScore = oppoScore + int.Parse(dressList[randomIndex].ItemScore.text);
+            oppodressScore = int.Parse(dressList[randomIndex].ItemScore.text);
         }
-         
-        oppoScore = oppoScore + int.Parse(dressList[randomIndex].ItemScore.text);
-        oppodressScore = int.Parse(dressList[randomIndex].ItemScore.text);
         #endregion
 
         #region frock
-        randomIndex = Random.Range(0, frockList.Count);
-        if (frockList[randomIndex] && oppoElements.frockImage)
+        if (playerfrockScore > 0)
         {
-            oppoElements.frockImage.gameObject.SetActive(true);
-            oppoElements.dressImage.gameObject.SetActive(false);
-            oppoElements.frockImage.sprite = frockSprites[randomIndex];
+            randomIndex = Random.Range(0, frockList.Count);
+            if (frockList[randomIndex] && oppoElements.frockImage)
+            {
+                oppoElements.frockImage.gameObject.SetActive(true);
+                oppoElements.dressImage.gameObject.SetActive(false);
+                oppoElements.frockImage.sprite = frockSprites[randomIndex];
+            }
+            oppoScore = oppoScore + int.Parse(frockList[randomIndex].ItemScore.text);
+            oppofrockScore = int.Parse(frockList[randomIndex].ItemScore.text);
         }
-        oppoScore = oppoScore + int.Parse(frockList[randomIndex].ItemScore.text);
-        oppofrockScore = int.Parse(frockList[randomIndex].ItemScore.text);
         #endregion
 
         #region shoes

@@ -1652,43 +1652,58 @@ public class PopMusic : MonoBehaviour
         int randomIndex = 0;
 
         #region dress
-        randomIndex = Random.Range(0, dressList.Count);
-        if (dressList[randomIndex] && oppoElements.dressImage)
+        if(playerdressScore > 0)
         {
-            oppoElements.dressImage.gameObject.SetActive(true);
-            oppoElements.topImage.gameObject.SetActive(false);
-            oppoElements.bottomImage.gameObject.SetActive(false);
-            oppoElements.dressImage.sprite = dressSprites[randomIndex];
+            randomIndex = Random.Range(0, dressList.Count);
+            if (dressList[randomIndex] && oppoElements.dressImage)
+            {
+                oppoElements.dressImage.gameObject.SetActive(true);
+                oppoElements.topImage.gameObject.SetActive(false);
+                oppoElements.bottomImage.gameObject.SetActive(false);
+                oppoElements.dressImage.sprite = dressSprites[randomIndex];
+            }
+
+            oppoScore = oppoScore + int.Parse(dressList[randomIndex].ItemScore.text);
+            oppodressScore = int.Parse(dressList[randomIndex].ItemScore.text);
         }
-         
-        oppoScore = oppoScore + int.Parse(dressList[randomIndex].ItemScore.text);
-        oppodressScore = int.Parse(dressList[randomIndex].ItemScore.text);
+        else
+        {
+            oppoElements.dressImage.gameObject.SetActive(false);
+            oppoElements.topImage.gameObject.SetActive(true);
+            oppoElements.bottomImage.gameObject.SetActive(true);
+        }
         #endregion
 
         #region top
-        randomIndex = Random.Range(0, topList.Count);
-        if (topList[randomIndex] && oppoElements.topImage)
+        if (playertopScore > 0)
         {
-            oppoElements.dressImage.gameObject.SetActive(false);
-            oppoElements.topImage.gameObject.SetActive(true);
-            oppoElements.bottomImage.gameObject.SetActive(true);
-            oppoElements.topImage.sprite = topSprites[randomIndex];
+            randomIndex = Random.Range(0, topList.Count);
+            if (topList[randomIndex] && oppoElements.topImage)
+            {
+                oppoElements.dressImage.gameObject.SetActive(false);
+                oppoElements.topImage.gameObject.SetActive(true);
+                oppoElements.bottomImage.gameObject.SetActive(true);
+                oppoElements.topImage.sprite = topSprites[randomIndex];
+            }
+            oppoScore = oppoScore + int.Parse(topList[randomIndex].ItemScore.text);
+            oppotopScore = int.Parse(topList[randomIndex].ItemScore.text);
         }
-        oppoScore = oppoScore + int.Parse(topList[randomIndex].ItemScore.text);
-        oppotopScore = int.Parse(topList[randomIndex].ItemScore.text);
         #endregion
 
         #region bottom
-        randomIndex = Random.Range(0, bottomList.Count);
-        if (bottomList[randomIndex] && oppoElements.bottomImage)
+        if (playerbottomScore > 0)
         {
-            oppoElements.dressImage.gameObject.SetActive(false);
-            oppoElements.topImage.gameObject.SetActive(true);
-            oppoElements.bottomImage.gameObject.SetActive(true);
-            oppoElements.bottomImage.sprite = bottomSprites[randomIndex];
+            randomIndex = Random.Range(0, bottomList.Count);
+            if (bottomList[randomIndex] && oppoElements.bottomImage)
+            {
+                oppoElements.dressImage.gameObject.SetActive(false);
+                oppoElements.topImage.gameObject.SetActive(true);
+                oppoElements.bottomImage.gameObject.SetActive(true);
+                oppoElements.bottomImage.sprite = bottomSprites[randomIndex];
+            }
+            oppoScore = oppoScore + int.Parse(bottomList[randomIndex].ItemScore.text);
+            oppobottomScore = int.Parse(bottomList[randomIndex].ItemScore.text);
         }
-        oppoScore = oppoScore + int.Parse(bottomList[randomIndex].ItemScore.text);
-        oppobottomScore = int.Parse(bottomList[randomIndex].ItemScore.text);
         #endregion
 
         #region shoes
