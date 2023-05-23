@@ -40,7 +40,7 @@ public class ModeSelection : MonoBehaviour
     private RewardType rewardType;
     public enum LoadLevel
     {
-        Wedding, Traditional, Sahree, PopMusic
+        Wedding, Traditional, Sarhee, PopMusic
     }
     private LoadLevel loadLevel;
 

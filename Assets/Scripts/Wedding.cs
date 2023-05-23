@@ -1929,7 +1929,7 @@ public class Wedding : MonoBehaviour
             uIElements.levelCompletePanel.SetActive(true);
             uIElements.stageDecuration.SetActive(true);
             yield return new WaitForSeconds(0.3f);
-            playerCharacterMover.Move(new Vector3(55, -175, 0), 0.5f, true, false);
+            playerCharacterMover.Move(new Vector3(55, -220, 0), 0.5f, true, false);
             yield return new WaitForSeconds(0.5f);
             finalPartical.SetActive(true);
             yield return new WaitForSeconds(1f);
@@ -1952,7 +1952,7 @@ public class Wedding : MonoBehaviour
             uIElements.levelCompletePanel.SetActive(true);
             uIElements.stageDecuration.SetActive(true);
             yield return new WaitForSeconds(0.3f);
-            oppoCharacterMover.Move(new Vector3(55, -175, 0), 0.5f, true, false);
+            oppoCharacterMover.Move(new Vector3(55, -220, 0), 0.5f, true, false);
             yield return new WaitForSeconds(0.5f);
             finalPartical.SetActive(true);
             yield return new WaitForSeconds(1f);
