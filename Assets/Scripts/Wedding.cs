@@ -867,7 +867,7 @@ public class Wedding : MonoBehaviour
     }
 
     #region ItemStatus
-        public void ItemStatus(int itemIndex)
+    public void ItemStatus(int itemIndex)
     {
         categoryBtn[itemIndex].transform.GetChild(1).GetComponent<Image>().sprite = greenSprite;
         categoryBtn[itemIndex].transform.GetChild(1).GetChild(0).gameObject.SetActive(true);
@@ -1060,6 +1060,7 @@ public class Wedding : MonoBehaviour
             }
             else
             {
+                if (_ItemInfo[i].LockIcon) _ItemInfo[i].LockIcon.SetActive(false);
                 if (_ItemInfo[i].videoLock) _ItemInfo[i].videoLock.SetActive(false);
                 if (_ItemInfo[i].coinLock) _ItemInfo[i].coinLock.SetActive(false);
             }
