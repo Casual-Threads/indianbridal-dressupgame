@@ -122,19 +122,33 @@ public class Traditional : MonoBehaviour
     private List<ItemInfo> lipsList = new List<ItemInfo>();
     private List<ItemInfo> shoesList = new List<ItemInfo>();
     private List<ItemInfo> handitemList = new List<ItemInfo>();
-    private int[] bangleScroe = { 1965, 3186, 6593, 5914, 1500, 2963, 1479, 7598, 1665, 6985, 2008, 6521, 1240, 1654, 4452};
-    private int[] bindiScroe = { 1865, 1186, 5594, 4915, 2501, 1964, 2478, 6599, 2666, 5986, 3028, 5522, 2241, 2655, 3453, 7564};
-    private int[] handitemScroe = { 2864, 2185, 4593, 6915, 3505, 3965, 3476, 6489, 3676, 5876, 3425, 4523, 1242, 1656};
-    private int[] earingScroe = { 1964, 3175, 2595, 3815, 5805, 3735, 2475, 5487, 3578, 4886, 2455, 3425, 3282, 1546, 2354};
-    private int[] dressScroe = { 1564, 3245, 2845, 1515, 4705, 1635, 2585, 4357, 3065, 4546, 1457, 2415, 5162, 1248, 5438};
-    private int[] mathapatiScroe = { 1763, 1296, 4584, 3715, 2401, 1744, 2568, 4589, 2054, 5726, 3548, 5128, 2381, 2585, 1472, 6453};
-    private int[] necklaceScroe = { 2874, 2165, 1485, 2415, 4705, 2734, 2185, 2467, 3578, 3526, 1456, 2585, 1272, 2945, 2464 };
-    private int[] blushScroe = {5481, 2894, 9545, 4784, 8415, 4892, 1654, 8756, 5645, 6156, 3121, 5726, 1161, 1644};
-    private int[] eyebrowScroe = {2154, 8421, 2184, 3214, 8489, 7212, 1848, 4231, 2484, 2156, 4844, 2391, 9681, 0824};
-    private int[] eyeshadeScroe = {2112, 1421, 4821, 5212, 1613, 8264, 1262, 3162, 1142, 3146, 3121, 2984};
-    private int[] hairScroe = {2156, 4121, 5451, 4923, 1842, 1564, 8921, 4215, 4121, 5648, 2165, 2118};
-    private int[] lipsScroe = {1164, 5421, 2174, 3214, 5489, 7252, 1643, 2181, 2974, 2125, 4754, 2381, 1651, 3726, 5448, 1548};
-    private int[] shoesScroe = {2132, 4842, 1482, 2164, 4512, 1641, 2316, 6213, 2156, 4821, 1568, 4895, 1231, 6123};
+
+    private int[] bangleScroe = { 1365, 3186, 6593, 5914, 1500, 2963, 1479, 7598, 4665, 6985 };
+
+    private int[] bindiScroe = { 1265, 1186, 5594, 4915, 2501, 1964, 2478, 6599, 3966, 1586, 3028, 5522, 1241, 2655, 3453, 7564 };
+
+    private int[] handitemScroe = { 1364, 2185, 4593, 6915, 1505, 3965, 3476, 6489, 1676, 5876, 3425 };
+
+    private int[] earingScroe = { 1164, 3175, 2595, 1815, 5805, 3735, 2475, 1487, 3578, 4886, 1655, 3425, 3282, 1546 };
+
+    private int[] dressScroe = { 1564, 3245, 1545, 4515, 8705, 1635, 2585, 5357, 1065, 4546, 3457, 1415, 5162, 4848, 5154 };
+
+    private int[] frockScroe = { 1463, 1296, 4584, 3715, 2401, 1744, 1568, 4589, 2054, 5726, 1548, 5128, 2381, 2585 };
+
+    private int[] necklaceScroe = { 1274, 2165, 1485, 2415, 4705, 2734, 1185, 2467, 3578, 1526, 3456, 2585, 1272, 2945, 2464 };
+
+    private int[] blushScroe = { 1381, 2894, 9545, 1784, 1415, 4892, 5654, 1756, 5645, 1156, 3121, 5726, 1161, 1644 };
+
+    private int[] eyebrowScroe = { 1154, 1421, 1184, 3214, 8489, 7212, 1848, 4231, 2484, 1156, 4844, 2391, 9681, 0824 };
+
+    private int[] eyeshadeScroe = { 1412, 5421, 4821, 5212, 1613, 8264, 1262, 3162, 1142, 3146, 3121, 2984 };
+
+    private int[] hairScroe = { 1056, 4121, 5451, 1923, 4842, 1564, 8921, 4215, 1121, 5648, 2165, 2118 };
+
+    private int[] lipsScroe = { 1164, 5421, 2174, 1214, 5489, 7252, 1643, 2181, 2974, 2125, 1754, 1381, 4651, 3726, 1365, 3654 };
+
+    private int[] shoesScroe = { 1532, 1842, 5482, 2164, 3512, 1641, 2316, 6213, 2156, 4821, 1568 };
+
     [Header("Default Character Sprites")]
     public Sprite defaultdress;
     public Sprite defaultHair, defaultLips, defaultEyebrow;
@@ -976,7 +990,7 @@ public class Traditional : MonoBehaviour
     {
         if (selectedItem == TraditionalSelectedItem.frock)
         {
-            SetItemsInfo(frockList, mathapatiScroe);
+            SetItemsInfo(frockList, frockScroe);
         }
         else if (selectedItem == TraditionalSelectedItem.bindi)
         {
