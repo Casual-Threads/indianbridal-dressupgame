@@ -171,7 +171,7 @@ public class PopMusic : MonoBehaviour
     public AudioSource categorySFX;
     public AudioSource purchaseSFX, itemSelectSFX, vsAnimSFX, winSFX, loseSFX, voteCatSFX, voteGivenSFX;
     public AudioSource[] voiceSounds;
-
+    private IEnumerator adDelayCouroutine;
     private int playerScore = 0;
     private int oppoScore = 0;
     int playerTotalScore, oppoTotalScore = 0;
@@ -202,7 +202,8 @@ public class PopMusic : MonoBehaviour
         uIElements.dressScroller.SetActive(true);
         SetInitialValues();
         GetItemsInfo();
-        StartCoroutine(AdDelay(45));
+        adDelayCouroutine = AdDelay(45);
+        StartCoroutine(adDelayCouroutine);
         totalCoins.text = SaveData.Instance.Coins.ToString();
         StartCoroutine(findOpponent());
     }
@@ -1133,7 +1134,7 @@ public class PopMusic : MonoBehaviour
         }
         else if (index == (int)PopMusicSelectedItem.earing)
         {
-            playerCharacterMover.Move(new Vector3(20, -550, -1000), 0.5f, true, false);
+            playerCharacterMover.Move(new Vector3(35, -420, -1000), 0.5f, true, false);
             selectedItem = PopMusicSelectedItem.earing;
             uIElements.earingScroller.SetActive(true);
         }
@@ -1145,37 +1146,37 @@ public class PopMusic : MonoBehaviour
         }
         else if (index == (int)PopMusicSelectedItem.eyeshade)
         {
-            playerCharacterMover.Move(new Vector3(20, -550, -1000), 0.5f, true, false);
+            playerCharacterMover.Move(new Vector3(35, -420, -1000), 0.5f, true, false);
             selectedItem = PopMusicSelectedItem.eyeshade;
             uIElements.eyeshadeScroller.SetActive(true);
         }
         else if (index == (int)PopMusicSelectedItem.necklace)
         {
-            playerCharacterMover.Move(new Vector3(20, -550, -1000), 0.5f, true, false);
+            playerCharacterMover.Move(new Vector3(35, -420, -1000), 0.5f, true, false);
             selectedItem = PopMusicSelectedItem.necklace;
             uIElements.necklaceScroller.SetActive(true);
         }
         else if (index == (int)PopMusicSelectedItem.hair)
         {
-            playerCharacterMover.Move(new Vector3(20, -550, -1000), 0.5f, true, false);
+            playerCharacterMover.Move(new Vector3(35, -420, -1000), 0.5f, true, false);
             selectedItem = PopMusicSelectedItem.hair;
             uIElements.hairScroller.SetActive(true);
         }
         else if (index == (int)PopMusicSelectedItem.lips)
         {
-            playerCharacterMover.Move(new Vector3(20, -550, -1000), 0.5f, true, false);
+            playerCharacterMover.Move(new Vector3(35, -420, -1000), 0.5f, true, false);
             selectedItem = PopMusicSelectedItem.lips;
             uIElements.lipsScroller.SetActive(true);
         }   
         else if (index == (int)PopMusicSelectedItem.blush)
         {
-            playerCharacterMover.Move(new Vector3(20, -550, -1000), 0.5f, true, false);
+            playerCharacterMover.Move(new Vector3(35, -420, -1000), 0.5f, true, false);
             selectedItem = PopMusicSelectedItem.blush;
             uIElements.blushScroller.SetActive(true);
         }
         else if (index == (int)PopMusicSelectedItem.eyebrow)
         {
-            playerCharacterMover.Move(new Vector3(20, -550, -1000), 0.5f, true, false);
+            playerCharacterMover.Move(new Vector3(35, -420, -1000), 0.5f, true, false);
             selectedItem = PopMusicSelectedItem.eyebrow;
             uIElements.eyebrowScroller.SetActive(true);
         }
@@ -1329,7 +1330,7 @@ public class PopMusic : MonoBehaviour
             uIElements.makeUpCategoryScroller.SetActive(true);
             uIElements.dressUpCategoryScroller.SetActive(false);
             selectedItem = PopMusicSelectedItem.lips;
-            playerCharacterMover.Move(new Vector3(20, -550, -1000), 0.5f, true, false);
+            playerCharacterMover.Move(new Vector3(35, -420, -1000), 0.5f, true, false);
             uIElements.makeUpBtn.SetActive(false);
             uIElements.dressUpBtn.SetActive(true);
         }
@@ -1587,7 +1588,9 @@ public class PopMusic : MonoBehaviour
             if (tempItem != null) tempItem.isLocked = false;
             UnlockSingleItem();
             canShowInterstitial = false;
-            StartCoroutine(AdDelay(45));
+            StopCoroutine(adDelayCouroutine);
+            adDelayCouroutine = AdDelay(45);
+            StartCoroutine(adDelayCouroutine);
             SelectItem(selectedIndex);
         }
         else if (rewardType == RewardType.coins)
@@ -1596,16 +1599,8 @@ public class PopMusic : MonoBehaviour
             totalCoins.text = SaveData.Instance.Coins.ToString();
             Usman_SaveLoad.SaveProgress();
         }
-        //else if (rewardType == RewardType.multipulOfTwo)
-        //{
-        //    StartCoroutine(AddCoinAnim(2 * totalReward));
-        //    //SaveData.Instance.Coins += 2 * totalReward;
-        //    totalCoins.text = SaveData.Instance.Coins.ToString();
-        //    Usman_SaveLoad.SaveProgress();
-        //}
         GetItemsInfo();
         rewardType = RewardType.none;
-        //if (purchaseSFX) purchaseSFX.Play();
     }
     public void changeRewardedCategory()
     {
@@ -1623,7 +1618,8 @@ public class PopMusic : MonoBehaviour
             if (MyAdsManager.Instance.IsInterstitialAvailable() && canShowInterstitial)
             {
                 canShowInterstitial = !canShowInterstitial;
-                StartCoroutine(AdDelay(45));
+                adDelayCouroutine = AdDelay(45);
+                StartCoroutine(adDelayCouroutine);
                 StartCoroutine(ShowInterstitialAD());
             }
         }

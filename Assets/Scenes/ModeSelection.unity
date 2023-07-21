@@ -354,6 +354,7 @@ MonoBehaviour:
   requiredCoins: 4000
   hotRib: 0
   premiumRib: 0
+  ItemScore: {fileID: 0}
 --- !u!1 &69473115
 GameObject:
   m_ObjectHideFlags: 0
@@ -737,6 +738,7 @@ MonoBehaviour:
   requiredCoins: 2000
   hotRib: 0
   premiumRib: 0
+  ItemScore: {fileID: 0}
 --- !u!1 &205676004
 GameObject:
   m_ObjectHideFlags: 0
@@ -888,6 +890,7 @@ MonoBehaviour:
   requiredCoins: 0
   hotRib: 0
   premiumRib: 0
+  ItemScore: {fileID: 0}
 --- !u!1 &235465624
 GameObject:
   m_ObjectHideFlags: 0
@@ -2795,7 +2798,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: -230}
+  m_AnchoredPosition: {x: 0, y: -240}
   m_SizeDelta: {x: 251, y: 74}
   m_Pivot: {x: 1, y: 1}
 --- !u!114 &685709009
@@ -3523,6 +3526,7 @@ MonoBehaviour:
   requiredCoins: 3000
   hotRib: 0
   premiumRib: 0
+  ItemScore: {fileID: 0}
 --- !u!1 &985969042
 GameObject:
   m_ObjectHideFlags: 0

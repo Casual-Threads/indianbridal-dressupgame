@@ -785,5 +785,37 @@ PrefabInstance:
       propertyPath: adsType
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 1826572841646777255, guid: 754380250c1cc8a40a56e4de8be5a40e, type: 3}
+      propertyPath: AdmobRVId
+      value: ca-app-pub-4480094532191071/8464780311
+      objectReference: {fileID: 0}
+    - target: {fileID: 1826572841646777255, guid: 754380250c1cc8a40a56e4de8be5a40e, type: 3}
+      propertyPath: MaxSdkKey
+      value: Za7F7M5J31fxPs_T58DHF3ZUilfxPreUoArf_mOW1DynJBnFBiEwAboTiJk0zpqz4F_wEDN4z_OPJme2HmT4Df
+      objectReference: {fileID: 0}
+    - target: {fileID: 1826572841646777255, guid: 754380250c1cc8a40a56e4de8be5a40e, type: 3}
+      propertyPath: AdmobAppId
+      value: ca-app-pub-4480094532191071~8457041458
+      objectReference: {fileID: 0}
+    - target: {fileID: 1826572841646777255, guid: 754380250c1cc8a40a56e4de8be5a40e, type: 3}
+      propertyPath: AdmobBannerId
+      value: ca-app-pub-4480094532191071/6879363769
+      objectReference: {fileID: 0}
+    - target: {fileID: 1826572841646777255, guid: 754380250c1cc8a40a56e4de8be5a40e, type: 3}
+      propertyPath: BannerAdUnitId
+      value: f193e9d7f246e9d7
+      objectReference: {fileID: 0}
+    - target: {fileID: 1826572841646777255, guid: 754380250c1cc8a40a56e4de8be5a40e, type: 3}
+      propertyPath: RewardedAdUnitId
+      value: ddde9b15734d0654
+      objectReference: {fileID: 0}
+    - target: {fileID: 1826572841646777255, guid: 754380250c1cc8a40a56e4de8be5a40e, type: 3}
+      propertyPath: AdmobInterstitialID
+      value: ca-app-pub-4480094532191071/8680402734
+      objectReference: {fileID: 0}
+    - target: {fileID: 1826572841646777255, guid: 754380250c1cc8a40a56e4de8be5a40e, type: 3}
+      propertyPath: InterstitialAdUnitId
+      value: 9904391c0a1aac82
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 754380250c1cc8a40a56e4de8be5a40e, type: 3}

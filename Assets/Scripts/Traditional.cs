@@ -175,7 +175,7 @@ public class Traditional : MonoBehaviour
     public AudioSource categorySFX;
     public AudioSource purchaseSFX, itemSelectSFX, vsAnimSFX, winSFX, loseSFX, voteCatSFX, voteGivenSFX;
     public AudioSource[] voiceSounds;
-
+    private IEnumerator adDelayCouroutine;
     private int playerScore = 0;
     private int oppoScore = 0;
     int playerTotalScore, oppoTotalScore = 0;
@@ -206,7 +206,8 @@ public class Traditional : MonoBehaviour
         uIElements.dressScroller.SetActive(true);
         SetInitialValues();
         GetItemsInfo();
-        StartCoroutine(AdDelay(45));
+        adDelayCouroutine = AdDelay(45);
+        StartCoroutine(adDelayCouroutine);
         totalCoins.text = SaveData.Instance.Coins.ToString();
         StartCoroutine(findOpponent());
     }
@@ -1143,7 +1144,7 @@ public class Traditional : MonoBehaviour
         }
         else if (index == (int)TraditionalSelectedItem.bindi)
         {
-            playerCharacterMover.Move(new Vector3(20, -600, -1000), 0.5f, true, false);
+            playerCharacterMover.Move(new Vector3(20, -400, -1000), 0.5f, true, false);
             selectedItem = TraditionalSelectedItem.bindi;
             uIElements.bindiScroller.SetActive(true);
         }
@@ -1167,43 +1168,43 @@ public class Traditional : MonoBehaviour
         }
         else if (index == (int)TraditionalSelectedItem.earing)
         {
-            playerCharacterMover.Move(new Vector3(20, -600, -1000), 0.5f, true, false);
+            playerCharacterMover.Move(new Vector3(20, -400, -1000), 0.5f, true, false);
             selectedItem = TraditionalSelectedItem.earing;
             uIElements.earingScroller.SetActive(true);
         }
         else if (index == (int)TraditionalSelectedItem.eyeshade)
         {
-            playerCharacterMover.Move(new Vector3(20, -600, -1000), 0.5f, true, false);
+            playerCharacterMover.Move(new Vector3(20, -400, -1000), 0.5f, true, false);
             selectedItem = TraditionalSelectedItem.eyeshade;
             uIElements.eyeshadeScroller.SetActive(true);
         }
         else if (index == (int)TraditionalSelectedItem.necklace)
         {
-            playerCharacterMover.Move(new Vector3(20, -600, -1000), 0.5f, true, false);
+            playerCharacterMover.Move(new Vector3(20, -400, -1000), 0.5f, true, false);
             selectedItem = TraditionalSelectedItem.necklace;
             uIElements.necklaceScroller.SetActive(true);
         }
         else if (index == (int)TraditionalSelectedItem.hair)
         {
-            playerCharacterMover.Move(new Vector3(20, -600, -1000), 0.5f, true, false);
+            playerCharacterMover.Move(new Vector3(20, -400, -1000), 0.5f, true, false);
             selectedItem = TraditionalSelectedItem.hair;
             uIElements.hairScroller.SetActive(true);
         }
         else if (index == (int)TraditionalSelectedItem.lips)
         {
-            playerCharacterMover.Move(new Vector3(20, -600, -1000), 0.5f, true, false);
+            playerCharacterMover.Move(new Vector3(20, -400, -1000), 0.5f, true, false);
             selectedItem = TraditionalSelectedItem.lips;
             uIElements.lipsScroller.SetActive(true);
         }   
         else if (index == (int)TraditionalSelectedItem.blush)
         {
-            playerCharacterMover.Move(new Vector3(20, -600, -1000), 0.5f, true, false);
+            playerCharacterMover.Move(new Vector3(20, -400, -1000), 0.5f, true, false);
             selectedItem = TraditionalSelectedItem.blush;
             uIElements.blushScroller.SetActive(true);
         }
         else if (index == (int)TraditionalSelectedItem.eyebrow)
         {
-            playerCharacterMover.Move(new Vector3(20, -600, -1000), 0.5f, true, false);
+            playerCharacterMover.Move(new Vector3(20, -400, -1000), 0.5f, true, false);
             selectedItem = TraditionalSelectedItem.eyebrow;
             uIElements.eyebrowScroller.SetActive(true);
         }
@@ -1365,7 +1366,7 @@ public class Traditional : MonoBehaviour
             uIElements.makeUpCategoryScroller.SetActive(true);
             uIElements.dressUpCategoryScroller.SetActive(false);
             selectedItem = TraditionalSelectedItem.lips;
-            playerCharacterMover.Move(new Vector3(20, -600, -1000), 0.5f, true, false);
+            playerCharacterMover.Move(new Vector3(20, -400, -1000), 0.5f, true, false);
             uIElements.makeUpBtn.SetActive(false);
             uIElements.dressUpBtn.SetActive(true);
         }
@@ -1623,7 +1624,9 @@ public class Traditional : MonoBehaviour
             if (tempItem != null) tempItem.isLocked = false;
             UnlockSingleItem();
             canShowInterstitial = false;
-            StartCoroutine(AdDelay(45));
+            StopCoroutine(adDelayCouroutine);
+            adDelayCouroutine = AdDelay(45);
+            StartCoroutine(adDelayCouroutine);
             SelectItem(selectedIndex);
         }
         else if (rewardType == RewardType.coins)
@@ -1632,16 +1635,8 @@ public class Traditional : MonoBehaviour
             totalCoins.text = SaveData.Instance.Coins.ToString();
             Usman_SaveLoad.SaveProgress();
         }
-        //else if (rewardType == RewardType.multipulOfTwo)
-        //{
-        //    StartCoroutine(AddCoinAnim(2 * totalReward));
-        //    //SaveData.Instance.Coins += 2 * totalReward;
-        //    totalCoins.text = SaveData.Instance.Coins.ToString();
-        //    Usman_SaveLoad.SaveProgress();
-        //}
         GetItemsInfo();
         rewardType = RewardType.none;
-        //if (purchaseSFX) purchaseSFX.Play();
     }
     public void changeRewardedCategory()
     {
@@ -1659,7 +1654,8 @@ public class Traditional : MonoBehaviour
             if (MyAdsManager.Instance.IsInterstitialAvailable() && canShowInterstitial)
             {
                 canShowInterstitial = !canShowInterstitial;
-                StartCoroutine(AdDelay(45));
+                adDelayCouroutine = AdDelay(45);
+                StartCoroutine(adDelayCouroutine);
                 StartCoroutine(ShowInterstitialAD());
             }
         }

@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "240624411588",
+    "project_id": "indian-bridal-dress-up-game",
+    "storage_bucket": "indian-bridal-dress-up-game.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:240624411588:android:4e1825e544b6566862fa91",
+        "android_client_info": {
+          "package_name": "com.happygames.indianbridal.dressup.game"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "240624411588-23gohtd13481kom63pldrji3ua54si29.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBTnJ7VyBx3TVId75rK7xjnvuysqgAT6RU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "240624411588-23gohtd13481kom63pldrji3ua54si29.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

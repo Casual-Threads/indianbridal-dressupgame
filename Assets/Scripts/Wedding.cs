@@ -177,7 +177,7 @@ public class Wedding : MonoBehaviour
     public AudioSource categorySFX;
     public AudioSource purchaseSFX, itemSelectSFX, vsAnimSFX, winSFX, loseSFX, voteCatSFX, voteGivenSFX;
     public AudioSource[] voiceSounds;
-
+    private IEnumerator adDelayCouroutine;
     private int playerScore = 0;
     private int oppoScore = 0;
     int playerTotalScore, oppoTotalScore = 0;
@@ -208,7 +208,8 @@ public class Wedding : MonoBehaviour
         uIElements.lehangaScroller.SetActive(true);
         SetInitialValues();
         GetItemsInfo();
-        StartCoroutine(AdDelay(45));
+        adDelayCouroutine = AdDelay(45);
+        StartCoroutine(adDelayCouroutine);
         totalCoins.text = SaveData.Instance.Coins.ToString();
         StartCoroutine(findOpponent());
     }
@@ -1146,13 +1147,13 @@ public class Wedding : MonoBehaviour
 
         if (index == (int)WeddingSelectedItem.mathapatti)
         {
-            playerCharacterMover.Move(new Vector3(57, -600, -1000), 0.5f, true, false);
+            playerCharacterMover.Move(new Vector3(35, -500, -1000), 0.5f, true, false);
             selectedItem = WeddingSelectedItem.mathapatti;
             uIElements.mathapattiScroller.SetActive(true);
         }
         else if (index == (int)WeddingSelectedItem.bindi)
         {
-            playerCharacterMover.Move(new Vector3(57, -600, -1000), 0.5f, true, false);
+            playerCharacterMover.Move(new Vector3(35, -500, -1000), 0.5f, true, false);
             selectedItem = WeddingSelectedItem.bindi;
             uIElements.bindiScroller.SetActive(true);
         }
@@ -1170,49 +1171,49 @@ public class Wedding : MonoBehaviour
         }
         else if (index == (int)WeddingSelectedItem.earing)
         {
-            playerCharacterMover.Move(new Vector3(57, -600, -1000), 0.5f, true, false);
+            playerCharacterMover.Move(new Vector3(35, -500, -1000), 0.5f, true, false);
             selectedItem = WeddingSelectedItem.earing;
             uIElements.earingScroller.SetActive(true);
         }
         else if (index == (int)WeddingSelectedItem.nosering)
         {
-            playerCharacterMover.Move(new Vector3(57, -600, -1000), 0.5f, true, false);
+            playerCharacterMover.Move(new Vector3(35, -500, -1000), 0.5f, true, false);
             selectedItem = WeddingSelectedItem.nosering;
             uIElements.noseringScroller.SetActive(true);
         }
         else if (index == (int)WeddingSelectedItem.eyeshade)
         {
-            playerCharacterMover.Move(new Vector3(57, -600, -1000), 0.5f, true, false);
+            playerCharacterMover.Move(new Vector3(35, -500, -1000), 0.5f, true, false);
             selectedItem = WeddingSelectedItem.eyeshade;
             uIElements.eyeshadeScroller.SetActive(true);
         }
         else if (index == (int)WeddingSelectedItem.necklace)
         {
-            playerCharacterMover.Move(new Vector3(57, -600, -1000), 0.5f, true, false);
+            playerCharacterMover.Move(new Vector3(35, -500, -1000), 0.5f, true, false);
             selectedItem = WeddingSelectedItem.necklace;
             uIElements.necklaceScroller.SetActive(true);
         }
         else if (index == (int)WeddingSelectedItem.hair)
         {
-            playerCharacterMover.Move(new Vector3(57, -600, -1000), 0.5f, true, false);
+            playerCharacterMover.Move(new Vector3(35, -500, -1000), 0.5f, true, false);
             selectedItem = WeddingSelectedItem.hair;
             uIElements.hairScroller.SetActive(true);
         }
         else if (index == (int)WeddingSelectedItem.lips)
         {
-            playerCharacterMover.Move(new Vector3(57, -600, -1000), 0.5f, true, false);
+            playerCharacterMover.Move(new Vector3(35, -500, -1000), 0.5f, true, false);
             selectedItem = WeddingSelectedItem.lips;
             uIElements.lipsScroller.SetActive(true);
         }   
         else if (index == (int)WeddingSelectedItem.blush)
         {
-            playerCharacterMover.Move(new Vector3(57, -600, -1000), 0.5f, true, false);
+            playerCharacterMover.Move(new Vector3(35, -500, -1000), 0.5f, true, false);
             selectedItem = WeddingSelectedItem.blush;
             uIElements.blushScroller.SetActive(true);
         }
         else if (index == (int)WeddingSelectedItem.eyebrow)
         {
-            playerCharacterMover.Move(new Vector3(57, -600, -1000), 0.5f, true, false);
+            playerCharacterMover.Move(new Vector3(35, -500, -1000), 0.5f, true, false);
             selectedItem = WeddingSelectedItem.eyebrow;
             uIElements.eyebrowScroller.SetActive(true);
         }
@@ -1375,7 +1376,7 @@ public class Wedding : MonoBehaviour
             uIElements.makeUpCategoryScroller.SetActive(true);
             uIElements.dressUpCategoryScroller.SetActive(false);
             selectedItem = WeddingSelectedItem.lips;
-            playerCharacterMover.Move(new Vector3(57, -600, -1000), 0.5f, true, false);
+            playerCharacterMover.Move(new Vector3(35, -500, -1000), 0.5f, true, false);
             uIElements.makeUpBtn.SetActive(false);
             uIElements.dressUpBtn.SetActive(true);
         }
@@ -1634,7 +1635,9 @@ public class Wedding : MonoBehaviour
             if (tempItem != null) tempItem.isLocked = false;
             UnlockSingleItem();
             canShowInterstitial = false;
-            StartCoroutine(AdDelay(45));
+            StopCoroutine(adDelayCouroutine);
+            adDelayCouroutine = AdDelay(45);
+            StartCoroutine(adDelayCouroutine);
             SelectItem(selectedIndex);
         }
         else if (rewardType == RewardType.coins)
@@ -1643,16 +1646,8 @@ public class Wedding : MonoBehaviour
             totalCoins.text = SaveData.Instance.Coins.ToString();
             Usman_SaveLoad.SaveProgress();
         }
-        //else if (rewardType == RewardType.multipulOfTwo)
-        //{
-        //    StartCoroutine(AddCoinAnim(2 * totalReward));
-        //    //SaveData.Instance.Coins += 2 * totalReward;
-        //    totalCoins.text = SaveData.Instance.Coins.ToString();
-        //    Usman_SaveLoad.SaveProgress();
-        //}
         GetItemsInfo();
         rewardType = RewardType.none;
-        //if (purchaseSFX) purchaseSFX.Play();
     }
     public void changeRewardedCategory()
     {
@@ -1670,7 +1665,8 @@ public class Wedding : MonoBehaviour
             if (MyAdsManager.Instance.IsInterstitialAvailable() && canShowInterstitial)
             {
                 canShowInterstitial = !canShowInterstitial;
-                StartCoroutine(AdDelay(45));
+                adDelayCouroutine = AdDelay(45);
+                StartCoroutine(adDelayCouroutine);
                 StartCoroutine(ShowInterstitialAD());
             }
         }

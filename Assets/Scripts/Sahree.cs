@@ -181,7 +181,7 @@ public class Sahree : MonoBehaviour
     public AudioSource categorySFX;
     public AudioSource purchaseSFX, itemSelectSFX, vsAnimSFX, winSFX, loseSFX, voteCatSFX, voteGivenSFX;
     public AudioSource[] voiceSounds;
-
+    private IEnumerator adDelayCouroutine;
     private int playerScore = 0;
     private int oppoScore = 0;
     int playerTotalScore, oppoTotalScore = 0;
@@ -212,7 +212,8 @@ public class Sahree : MonoBehaviour
         uIElements.dressScroller.SetActive(true);
         SetInitialValues();
         GetItemsInfo();
-        StartCoroutine(AdDelay(45));
+        adDelayCouroutine = AdDelay(45);
+        StartCoroutine(adDelayCouroutine);
         totalCoins.text = SaveData.Instance.Coins.ToString();
         StartCoroutine(findOpponent());
     }
@@ -1190,13 +1191,13 @@ public class Sahree : MonoBehaviour
 
         if (index == (int)SahreeSelectedItem.mathapatti)
         {
-            playerCharacterMover.Move(new Vector3(20, -550, -1000), 0.5f, true, false);
+            playerCharacterMover.Move(new Vector3(35, -450, -1000), 0.5f, true, false);
             selectedItem = SahreeSelectedItem.mathapatti;
             uIElements.mathapattiScroller.SetActive(true);
         }
         else if (index == (int)SahreeSelectedItem.bindi)
         {
-            playerCharacterMover.Move(new Vector3(20, -550, -1000), 0.5f, true, false);
+            playerCharacterMover.Move(new Vector3(35, -450, -1000), 0.5f, true, false);
             selectedItem = SahreeSelectedItem.bindi;
             uIElements.bindiScroller.SetActive(true);
         }
@@ -1220,49 +1221,49 @@ public class Sahree : MonoBehaviour
         }
         else if (index == (int)SahreeSelectedItem.earing)
         {
-            playerCharacterMover.Move(new Vector3(20, -550, -1000), 0.5f, true, false);
+            playerCharacterMover.Move(new Vector3(35, -450, -1000), 0.5f, true, false);
             selectedItem = SahreeSelectedItem.earing;
             uIElements.earingScroller.SetActive(true);
         }
         else if (index == (int)SahreeSelectedItem.nosering)
         {
-            playerCharacterMover.Move(new Vector3(20, -550, -1000), 0.5f, true, false);
+            playerCharacterMover.Move(new Vector3(35, -450, -1000), 0.5f, true, false);
             selectedItem = SahreeSelectedItem.nosering;
             uIElements.noseringScroller.SetActive(true);
         }
         else if (index == (int)SahreeSelectedItem.eyeshade)
         {
-            playerCharacterMover.Move(new Vector3(20, -550, -1000), 0.5f, true, false);
+            playerCharacterMover.Move(new Vector3(35, -450, -1000), 0.5f, true, false);
             selectedItem = SahreeSelectedItem.eyeshade;
             uIElements.eyeshadeScroller.SetActive(true);
         }
         else if (index == (int)SahreeSelectedItem.necklace)
         {
-            playerCharacterMover.Move(new Vector3(20, -550, -1000), 0.5f, true, false);
+            playerCharacterMover.Move(new Vector3(35, -450, -1000), 0.5f, true, false);
             selectedItem = SahreeSelectedItem.necklace;
             uIElements.necklaceScroller.SetActive(true);
         }
         else if (index == (int)SahreeSelectedItem.hair)
         {
-            playerCharacterMover.Move(new Vector3(20, -550, -1000), 0.5f, true, false);
+            playerCharacterMover.Move(new Vector3(35, -450, -1000), 0.5f, true, false);
             selectedItem = SahreeSelectedItem.hair;
             uIElements.hairScroller.SetActive(true);
         }
         else if (index == (int)SahreeSelectedItem.lips)
         {
-            playerCharacterMover.Move(new Vector3(20, -550, -1000), 0.5f, true, false);
+            playerCharacterMover.Move(new Vector3(35, -450, -1000), 0.5f, true, false);
             selectedItem = SahreeSelectedItem.lips;
             uIElements.lipsScroller.SetActive(true);
         }   
         else if (index == (int)SahreeSelectedItem.blush)
         {
-            playerCharacterMover.Move(new Vector3(20, -550, -1000), 0.5f, true, false);
+            playerCharacterMover.Move(new Vector3(35, -450, -1000), 0.5f, true, false);
             selectedItem = SahreeSelectedItem.blush;
             uIElements.blushScroller.SetActive(true);
         }
         else if (index == (int)SahreeSelectedItem.eyebrow)
         {
-            playerCharacterMover.Move(new Vector3(20, -550, -1000), 0.5f, true, false);
+            playerCharacterMover.Move(new Vector3(35, -450, -1000), 0.5f, true, false);
             selectedItem = SahreeSelectedItem.eyebrow;
             uIElements.eyebrowScroller.SetActive(true);
         }
@@ -1432,7 +1433,7 @@ public class Sahree : MonoBehaviour
             uIElements.makeUpCategoryScroller.SetActive(true);
             uIElements.dressUpCategoryScroller.SetActive(false);
             selectedItem = SahreeSelectedItem.lips;
-            playerCharacterMover.Move(new Vector3(20, -550, -1000), 0.5f, true, false);
+            playerCharacterMover.Move(new Vector3(35, -450, -1000), 0.5f, true, false);
             uIElements.makeUpBtn.SetActive(false);
             uIElements.dressUpBtn.SetActive(true);
         }
@@ -1690,7 +1691,9 @@ public class Sahree : MonoBehaviour
             if (tempItem != null) tempItem.isLocked = false;
             UnlockSingleItem();
             canShowInterstitial = false;
-            StartCoroutine(AdDelay(45));
+            StopCoroutine(adDelayCouroutine);
+            adDelayCouroutine = AdDelay(45);
+            StartCoroutine(adDelayCouroutine);
             SelectItem(selectedIndex);
         }
         else if (rewardType == RewardType.coins)
@@ -1699,16 +1702,8 @@ public class Sahree : MonoBehaviour
             totalCoins.text = SaveData.Instance.Coins.ToString();
             Usman_SaveLoad.SaveProgress();
         }
-        //else if (rewardType == RewardType.multipulOfTwo)
-        //{
-        //    StartCoroutine(AddCoinAnim(2 * totalReward));
-        //    //SaveData.Instance.Coins += 2 * totalReward;
-        //    totalCoins.text = SaveData.Instance.Coins.ToString();
-        //    Usman_SaveLoad.SaveProgress();
-        //}
         GetItemsInfo();
         rewardType = RewardType.none;
-        //if (purchaseSFX) purchaseSFX.Play();
     }
     public void changeRewardedCategory()
     {
@@ -1726,7 +1721,8 @@ public class Sahree : MonoBehaviour
             if (MyAdsManager.Instance.IsInterstitialAvailable() && canShowInterstitial)
             {
                 canShowInterstitial = !canShowInterstitial;
-                StartCoroutine(AdDelay(45));
+                adDelayCouroutine = AdDelay(45);
+                StartCoroutine(adDelayCouroutine);
                 StartCoroutine(ShowInterstitialAD());
             }
         }

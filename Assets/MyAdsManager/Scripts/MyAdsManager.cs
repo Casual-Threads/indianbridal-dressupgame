@@ -126,7 +126,6 @@ public class MyAdsManager : MonoBehaviour
             InitializeApplovinInterstitial();
             InitializeApplovinRewarded();
             InitializeApplovinBanner();
-            ShowApplovinBanner();
         };
         MaxSdk.SetSdkKey(MaxSdkKey);
         MaxSdk.SetUserId("USER_ID");
