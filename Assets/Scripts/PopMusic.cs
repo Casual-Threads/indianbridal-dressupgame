@@ -1671,7 +1671,6 @@ public class PopMusic : MonoBehaviour
                 oppoElements.bottomImage.gameObject.SetActive(false);
                 oppoElements.dressImage.sprite = dressSprites[randomIndex];
             }
-
             oppoScore = oppoScore + int.Parse(dressList[randomIndex].ItemScore.text);
             oppodressScore = int.Parse(dressList[randomIndex].ItemScore.text);
         }
