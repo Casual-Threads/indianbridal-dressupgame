@@ -309,6 +309,27 @@ public class MaxSdkUtils
 
 #if UNITY_IOS
     [DllImport("__Internal")]
+    private static extern bool _MaxIsPhysicalDevice();
+#endif
+
+    /// <summary>
+    /// Returns whether or not a physical device is being used, as opposed to an emulator / simulator.
+    /// </summary>
+    public static bool IsPhysicalDevice()
+    {
+#if UNITY_EDITOR
+        return false;
+#elif UNITY_IOS
+        return _MaxIsPhysicalDevice();
+#elif UNITY_ANDROID
+        return MaxUnityPluginClass.CallStatic<bool>("isPhysicalDevice");
+#else
+        return false;
+#endif
+    }
+
+#if UNITY_IOS
+    [DllImport("__Internal")]
     private static extern float _MaxScreenDensity();
 #endif
 
@@ -326,6 +347,145 @@ public class MaxSdkUtils
 #else
         return -1;
 #endif
+    }
+
+    /// <summary>
+    /// Parses the IABTCF_VendorConsents string to determine the consent status of the IAB vendor with the provided ID.
+    /// NOTE: Must be called after AppLovin MAX SDK has been initialized.
+    /// </summary>
+    /// <param name="vendorId">Vendor ID as defined in the Global Vendor List.</param>
+    /// <returns><c>true</c> if the vendor has consent, <c>false</c> if not, or <c>null</c> if TC data is not available on disk.</returns>
+    /// <see href="https://vendor-list.consensu.org/v3/vendor-list.json">Current Version of Global Vendor List</see>
+    public static bool? GetTcfConsentStatus(int vendorId)
+    {
+        var tcfConsentStatus = GetPlatformSpecificTcfConsentStatus(vendorId);
+        return GetConsentStatusValue(tcfConsentStatus);
+    }
+
+#if UNITY_IOS
+    [DllImport("__Internal")]
+    private static extern int _MaxGetTcfVendorConsentStatus(int vendorIdentifier);
+#endif
+
+    private static int GetPlatformSpecificTcfConsentStatus(int vendorId)
+    {
+#if UNITY_EDITOR
+        return -1;
+#elif UNITY_IOS
+        return _MaxGetTcfVendorConsentStatus(vendorId);
+#elif UNITY_ANDROID
+        return MaxUnityPluginClass.CallStatic<int>("getTcfVendorConsentStatus", vendorId);
+#else
+        return -1;
+#endif
+    }
+
+    /// <summary>
+    /// Parses the IABTCF_AddtlConsent string to determine the consent status of the advertising entity with the provided Ad Technology Provider (ATP) ID.
+    /// NOTE: Must be called after AppLovin MAX SDK has been initialized.
+    /// </summary>
+    /// <param name="atpId">ATP ID of the advertising entity (e.g. 89 for Meta Audience Network).</param>
+    /// <returns>
+    /// <c>true</c> if the advertising entity has consent, <c>false</c> if not, or <c>null</c> if no AC string is available on disk or the ATP network was not listed in the CMP flow.
+    /// </returns>
+    /// <see href="https://support.google.com/admanager/answer/9681920">Google’s Additional Consent Mode technical specification</see>
+    /// <see href="https://storage.googleapis.com/tcfac/additional-consent-providers.csv">List of Google ATPs and their IDs</see>
+    public static bool? GetAdditionalConsentStatus(int atpId)
+    {
+        var additionalConsentStatus = GetPlatformSpecificAdditionalConsentStatus(atpId);
+        return GetConsentStatusValue(additionalConsentStatus);
+    }
+
+#if UNITY_IOS
+    [DllImport("__Internal")]
+    private static extern int _MaxGetAdditionalConsentStatus(int atpIdentifier);
+#endif
+
+    private static int GetPlatformSpecificAdditionalConsentStatus(int atpId)
+    {
+#if UNITY_EDITOR
+        return -1;
+#elif UNITY_IOS
+        return _MaxGetAdditionalConsentStatus(atpId);
+#elif UNITY_ANDROID
+        return MaxUnityPluginClass.CallStatic<int>("getAdditionalConsentStatus", atpId);
+#else
+        return -1;
+#endif
+    }
+
+    /// <summary>
+    /// Parses the IABTCF_PurposeConsents String to determine the consent status of the IAB defined data processing purpose.
+    /// NOTE: Must be called after AppLovin MAX SDK has been initialized.
+    /// </summary>
+    /// <param name="purposeId">Purpose ID.</param>
+    /// <returns><c>true</c> if the purpose has consent, <c>false</c> if not, or <c>null</c> if TC data is not available on disk.</returns>
+    /// <see href="https://storage.googleapis.com/tcfac/additional-consent-providers.csv">see IAB Europe Transparency and Consent Framework Policies (Appendix A) for purpose definitions.</see>
+    public static bool? GetPurposeConsentStatus(int purposeId)
+    {
+        var purposeConsentStatus = GetPlatformSpecificPurposeConsentStatus(purposeId);
+        return GetConsentStatusValue(purposeConsentStatus);
+    }
+
+#if UNITY_IOS
+    [DllImport("__Internal")]
+    private static extern int _MaxGetPurposeConsentStatus(int purposeIdentifier);
+#endif
+
+    private static int GetPlatformSpecificPurposeConsentStatus(int purposeId)
+    {
+#if UNITY_EDITOR
+        return -1;
+#elif UNITY_IOS
+        return _MaxGetPurposeConsentStatus(purposeId);
+#elif UNITY_ANDROID
+        return MaxUnityPluginClass.CallStatic<int>("getPurposeConsentStatus", purposeId);
+#else
+        return -1;
+#endif
+    }
+
+    /// <summary>
+    /// Parses the IABTCF_SpecialFeaturesOptIns String to determine the opt-in status of the IAB defined special feature.
+    /// NOTE: Must be called after AppLovin MAX SDK has been initialized.
+    /// </summary>
+    /// <param name="specialFeatureId">Special feature ID.</param>
+    /// <returns><c>true</c> if the user opted in for the special feature, <c>false</c> if not, or <c>null</c> if TC data is not available on disk.</returns>
+    /// <see href="https://iabeurope.eu/iab-europe-transparency-consent-framework-policies">IAB Europe Transparency and Consent Framework Policies (Appendix A) for special features </see>
+    public static bool? GetSpecialFeatureOptInStatus(int specialFeatureId)
+    {
+        var specialFeatureOptInStatus = GetPlatformSpecificSpecialFeatureOptInStatus(specialFeatureId);
+        return GetConsentStatusValue(specialFeatureOptInStatus);
+    }
+
+#if UNITY_IOS
+    [DllImport("__Internal")]
+    private static extern int _MaxGetSpecialFeatureOptInStatus(int specialFeatureIdentifier);
+#endif
+
+    private static int GetPlatformSpecificSpecialFeatureOptInStatus(int specialFeatureId)
+    {
+#if UNITY_EDITOR
+        return -1;
+#elif UNITY_IOS
+        return _MaxGetSpecialFeatureOptInStatus(specialFeatureId);
+#elif UNITY_ANDROID
+        return MaxUnityPluginClass.CallStatic<int>("getSpecialFeatureOptInStatus", specialFeatureId);
+#else
+        return -1;
+#endif
+    }
+
+    private static bool? GetConsentStatusValue(int consentStatus)
+    {
+        if (consentStatus == -1)
+        {
+            return null;
+        }
+        else
+        {
+            return consentStatus == 1;
+        }
     }
 
     /// <summary>
@@ -395,7 +555,6 @@ public class MaxSdkUtils
             iosComparison = VersionComparisonResult.Lesser;
         }
 
-
         // If either one of the Android or iOS version is greater, the entire version should be greater.
         return (androidComparison == VersionComparisonResult.Greater || iosComparison == VersionComparisonResult.Greater) ? VersionComparisonResult.Greater : VersionComparisonResult.Lesser;
     }
@@ -422,7 +581,7 @@ public class MaxSdkUtils
         var versionABetaNumber = 0;
         if (isVersionABeta)
         {
-            var components = versionA.Split(new[] {"-beta"}, StringSplitOptions.None);
+            var components = versionA.Split(new[] { "-beta" }, StringSplitOptions.None);
             versionA = components[0];
             versionABetaNumber = int.TryParse(components[1], out piece) ? piece : 0;
         }
@@ -431,7 +590,7 @@ public class MaxSdkUtils
         var versionBBetaNumber = 0;
         if (isVersionBBeta)
         {
-            var components = versionB.Split(new[] {"-beta"}, StringSplitOptions.None);
+            var components = versionB.Split(new[] { "-beta" }, StringSplitOptions.None);
             versionB = components[0];
             versionBBetaNumber = int.TryParse(components[1], out piece) ? piece : 0;
         }
@@ -475,6 +634,16 @@ public class MaxSdkUtils
         return VersionComparisonResult.Equal;
     }
 
+    /// <summary>
+    /// Check if the given string is valid - not <c>null</c> and not empty.
+    /// </summary>
+    /// <param name="toCheck">The string to be checked.</param>
+    /// <returns><c>true</c> if the given string is not <c>null</c> and not empty.</returns>
+    public static bool IsValidString(string toCheck)
+    {
+        return !string.IsNullOrEmpty(toCheck);
+    }
+
 #if UNITY_EDITOR
     /// <summary>
     /// Gets the path of the asset in the project for a given MAX plugin export path.
@@ -484,7 +653,8 @@ public class MaxSdkUtils
     public static string GetAssetPathForExportPath(string exportPath)
     {
         var defaultPath = Path.Combine("Assets", exportPath);
-        var assetGuids = AssetDatabase.FindAssets("l:al_max_export_path-" + exportPath);
+        var assetLabelToFind = "l:al_max_export_path-" + exportPath.Replace(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar);
+        var assetGuids = AssetDatabase.FindAssets(assetLabelToFind);
 
         return assetGuids.Length < 1 ? defaultPath : AssetDatabase.GUIDToAssetPath(assetGuids[0]);
     }

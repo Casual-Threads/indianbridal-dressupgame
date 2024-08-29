@@ -80,6 +80,14 @@ namespace GameAnalyticsSDK.Wrapper
             }
         }
 
+        public static string getUserId() {
+            if (GameAnalytics.SettingsGA.InfoLogEditor) {
+                Debug.Log ("getUserId");
+            }
+
+            return "";
+        }
+
         private static void initialize (string gamekey, string gamesecret)
         {
             if (GameAnalytics.SettingsGA.InfoLogEditor) {
@@ -403,6 +411,15 @@ namespace GameAnalyticsSDK.Wrapper
             setEventSubmission (enabled);
         }
 
+        public static void SetEnabledEventSubmission (bool enabled, bool doCache)
+        {
+            #if !UNITY_EDITOR && (UNITY_IOS || UNITY_ANDROID)
+                setEventSubmission (enabled, doCache);
+            #else
+                setEventSubmission (enabled);
+            #endif
+        }
+
         public static void SetAutoDetectAppVersion (bool flag)
         {
             configureAutoDetectAppVersion (flag);
@@ -575,7 +592,7 @@ namespace GameAnalyticsSDK.Wrapper
             {
                 addAdEventWithDuration((int)adAction, (int)adType, adSdkName, adPlacement, duration, fieldsAsString, mergeFields);
             }
-#elif UNITY_IOS || UNITY_ANDROID
+#elif UNITY_IOS || UNITY_ANDROID || UNITY_WEBGL
                 addAdEventWithDuration((int)adAction, (int)adType, adSdkName, adPlacement, duration, fieldsAsString, mergeFields);
 #endif
         }
@@ -588,7 +605,7 @@ namespace GameAnalyticsSDK.Wrapper
             {
                 addAdEventWithReason((int)adAction, (int)adType, adSdkName, adPlacement, (int)noAdReason, fieldsAsString, mergeFields);
             }
-#elif UNITY_IOS || UNITY_ANDROID
+#elif UNITY_IOS || UNITY_ANDROID || UNITY_WEBGL
                 addAdEventWithReason((int)adAction, (int)adType, adSdkName, adPlacement, (int)noAdReason, fieldsAsString, mergeFields);
 #endif
         }
@@ -601,7 +618,7 @@ namespace GameAnalyticsSDK.Wrapper
             {
                 addAdEvent((int)adAction, (int)adType, adSdkName, adPlacement, fieldsAsString, mergeFields);
             }
-#elif UNITY_IOS || UNITY_ANDROID
+#elif UNITY_IOS || UNITY_ANDROID || UNITY_WEBGL
                 addAdEvent((int)adAction, (int)adType, adSdkName, adPlacement, fieldsAsString, mergeFields);
 #endif
         }
@@ -636,6 +653,16 @@ namespace GameAnalyticsSDK.Wrapper
             return getRemoteConfigsContentAsString();
         }
 
+        public static string GetRemoteConfigsContentAsJSON()
+        {
+            #if UNITY_IOS && !(UNITY_EDITOR)
+                return getRemoteConfigsContentAsJSON();
+            #else
+                return GetRemoteConfigsContentAsString();
+            #endif
+        }
+
+
         public static string GetABTestingId()
         {
             return getABTestingId();
@@ -644,6 +671,24 @@ namespace GameAnalyticsSDK.Wrapper
         public static string GetABTestingVariantId()
         {
             return getABTestingVariantId();
+        }
+
+        public static void SetExternalUserId(string userId)
+        {
+            #if (UNITY_IOS || UNITY_ANDROID) && !(UNITY_EDITOR)
+                configureExternalUserId(userId);
+            #else
+                return;
+            #endif
+        }
+
+        public static string GetExternalUserId()
+        {
+            #if (UNITY_IOS || UNITY_ANDROID) && !(UNITY_EDITOR)
+                return getExternalUserId();
+            #else
+                return "";
+            #endif
         }
 
         private static string DictionaryToJsonString(IDictionary<string, object> dict)
@@ -697,5 +742,36 @@ namespace GameAnalyticsSDK.Wrapper
             return 0;
 #endif
         }
+
+        ///// HEALTH
+
+        public static void EnableSDKInitEvent(bool flag)
+        {
+            #if !UNITY_EDITOR && (UNITY_IOS || UNITY_ANDROID)
+                enableSDKInitEvent(flag);
+            #endif
+        }
+
+        public static void EnableFpsHistogram(bool flag)
+        {
+            #if !UNITY_EDITOR && (UNITY_IOS || UNITY_ANDROID)
+                enableFpsHistogram(flag);
+            #endif
+        }
+
+        public static void EnableMemoryHistogram(bool flag)
+        {
+            #if !UNITY_EDITOR && (UNITY_IOS || UNITY_ANDROID)
+                enableMemoryHistogram(flag);
+            #endif
+        }
+
+        public static void EnableHealthHardwareInfo(bool flag)
+        {
+            #if !UNITY_EDITOR && (UNITY_IOS || UNITY_ANDROID)
+                enableHealthHardwareInfo(flag);
+            #endif
+        }
     }
+
 }

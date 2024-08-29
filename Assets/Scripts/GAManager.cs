@@ -31,7 +31,7 @@ public class GAManager : MonoBehaviour
 
     public void LogDesignEvent(string eventName)
     {
-        GameAnalytics.NewDesignEvent(eventName);
+       GameAnalytics.NewDesignEvent(eventName);
     }
 
 }

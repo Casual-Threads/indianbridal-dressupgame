@@ -348,7 +348,7 @@ public class MyAdsManager : MonoBehaviour
         // You may use the utility method `MaxSdkUtils.isTablet()` to help with view sizing adjustments.
         MaxSdk.CreateBanner(BannerAdUnitId, applovinBannerPosition);
         // Set background or background color for banners to be fully functional.
-        Color color = new Color(0, 0, 0, 0.5f);
+        Color color = new Color(0, 0, 0, 15);
         MaxSdk.SetBannerBackgroundColor(BannerAdUnitId, color);
     }
     public void ShowApplovinBanner()

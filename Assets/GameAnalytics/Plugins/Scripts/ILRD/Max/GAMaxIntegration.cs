@@ -44,12 +44,12 @@ public class GAMaxIntegration
             return;
         }
 
-        MaxSdkCallbacks.Interstitial.OnAdRevenuePaidEvent += (adUnitId, adInfo) => runCallback("INTER", adInfo, callback);
-        MaxSdkCallbacks.Banner.OnAdRevenuePaidEvent += (adUnitId, adInfo) => runCallback("BANNER", adInfo, callback);
-        MaxSdkCallbacks.Rewarded.OnAdRevenuePaidEvent += (adUnitId, adInfo) => runCallback("REWARDED", adInfo, callback);
-        MaxSdkCallbacks.CrossPromo.OnAdRevenuePaidEvent += (adUnitId, adInfo) => runCallback("XPROMO", adInfo, callback);
-        MaxSdkCallbacks.MRec.OnAdRevenuePaidEvent += (adUnitId, adInfo) => runCallback("MREC", adInfo, callback);
-        MaxSdkCallbacks.RewardedInterstitial.OnAdRevenuePaidEvent += (adUnitId, adInfo) => runCallback("REWARDED_INTER", adInfo, callback);
+        //MaxSdkCallbacks.Interstitial.OnAdRevenuePaidEvent += (adUnitId, adInfo) => runCallback("INTER", adInfo, callback);
+        //MaxSdkCallbacks.Banner.OnAdRevenuePaidEvent += (adUnitId, adInfo) => runCallback("BANNER", adInfo, callback);
+        //MaxSdkCallbacks.Rewarded.OnAdRevenuePaidEvent += (adUnitId, adInfo) => runCallback("REWARDED", adInfo, callback);
+        //MaxSdkCallbacks.CrossPromo.OnAdRevenuePaidEvent += (adUnitId, adInfo) => runCallback("XPROMO", adInfo, callback);
+        //MaxSdkCallbacks.MRec.OnAdRevenuePaidEvent += (adUnitId, adInfo) => runCallback("MREC", adInfo, callback);
+        //MaxSdkCallbacks.RewardedInterstitial.OnAdRevenuePaidEvent += (adUnitId, adInfo) => runCallback("REWARDED_INTER", adInfo, callback);
         _subscribed = true;
 #endif
     }

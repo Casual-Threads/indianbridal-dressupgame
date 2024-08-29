@@ -13,6 +13,7 @@ namespace GameAnalyticsSDK
 #if gameanalytics_mopub_enabled
         private static readonly AndroidJavaClass MoPubClass = new AndroidJavaClass("com.mopub.unity.MoPubUnityPlugin");
 #endif
+
 #if gameanalytics_topon_enabled
         private static readonly AndroidJavaClass TopOnClass = new AndroidJavaClass("com.anythink.core.api.ATSDK");
 #endif
@@ -120,33 +121,38 @@ namespace GameAnalyticsSDK
         }
 
 #if gameanalytics_admob_enabled
-        private static void subscribeAdMobImpressions(string adUnitId, GoogleMobileAds.Api.BannerView ad)
-        {
-            GAAdMobIntegration.ListenForImpressions(adUnitId, ad, AdMobImpressionHandler);
-        }
+        //private static void subscribeAdMobImpressions(string adUnitId, GoogleMobileAds.Api.BannerView ad)
+        //{
+        //    GAAdMobIntegration.ListenForImpressions(adUnitId, ad, AdMobImpressionHandler);
+        //}
 
-        private static void subscribeAdMobImpressions(string adUnitId, GoogleMobileAds.Api.InterstitialAd ad)
-        {
-            GAAdMobIntegration.ListenForImpressions(adUnitId, ad, AdMobImpressionHandler);
-        }
+        //private static void subscribeAdMobImpressions(string adUnitId, GoogleMobileAds.Api.InterstitialAd ad)
+        //{
+        //    GAAdMobIntegration.ListenForImpressions(adUnitId, ad, AdMobImpressionHandler);
+        //}
 
-        private static void subscribeAdMobImpressions(string adUnitId, GoogleMobileAds.Api.RewardedAd ad)
-        {
-            GAAdMobIntegration.ListenForImpressions(adUnitId, ad, AdMobImpressionHandler);
-        }
+        //private static void subscribeAdMobImpressions(string adUnitId, GoogleMobileAds.Api.RewardedAd ad)
+        //{
+        //    GAAdMobIntegration.ListenForImpressions(adUnitId, ad, AdMobImpressionHandler);
+        //}
 
-        private static void subscribeAdMobImpressions(string adUnitId, GoogleMobileAds.Api.RewardedInterstitialAd ad)
-        {
-            GAAdMobIntegration.ListenForImpressions(adUnitId, ad, AdMobImpressionHandler);
-        }
+        //private static void subscribeAdMobImpressions(string adUnitId, GoogleMobileAds.Api.RewardedInterstitialAd ad)
+        //{
+        //    GAAdMobIntegration.ListenForImpressions(adUnitId, ad, AdMobImpressionHandler);
+        //}
 
-        private static void AdMobImpressionHandler(string sdkVersion, string json)
-        {
-            if(!string.IsNullOrEmpty(json))
-            {
-                GA.CallStatic("addImpressionAdMobEvent", sdkVersion, json);
-            }
-        }
+        //private static void subscribeAdMobImpressions(string adUnitId, GoogleMobileAds.Api.AppOpenAd ad)
+        //{
+        //    GAAdMobIntegration.ListenForImpressions(adUnitId, ad, AdMobImpressionHandler);
+        //}
+
+        //private static void AdMobImpressionHandler(string sdkVersion, string json)
+        //{
+        //    if(!string.IsNullOrEmpty(json))
+        //    {
+        //        GA.CallStatic("addImpressionAdMobEvent", sdkVersion, json);
+        //    }
+        //}
 #endif
 
 #endif
@@ -305,6 +311,11 @@ namespace GameAnalyticsSDK
             GAAdMobIntegration.ListenForImpressions(adUnitId, ad, AdMobImpressionHandler);
         }
 
+        private static void subscribeAdMobImpressions(string adUnitId, GoogleMobileAds.Api.AppOpenAd ad)
+        {
+            GAAdMobIntegration.ListenForImpressions(adUnitId, ad, AdMobImpressionHandler);
+        }
+
         private static void AdMobImpressionHandler(string sdkVersion, string json)
         {
             if(!string.IsNullOrEmpty(json))
@@ -370,7 +381,7 @@ namespace GameAnalyticsSDK
         public static void SubscribeAequusImpressions()
         {
 #if UNITY_EDITOR
-            Debug.Log("subscribeAequusImpressions()");
+            Debug.Log("subscribeAequusImpressions()"); 
 #elif UNITY_IOS || UNITY_ANDROID
             subscribeAequusImpressions();
 #endif
@@ -393,7 +404,7 @@ namespace GameAnalyticsSDK
 #if UNITY_EDITOR
             Debug.Log("subscribeAdMobImpressions(adUnitId, bannerView)");
 #elif UNITY_IOS || UNITY_ANDROID
-            subscribeAdMobImpressions(adUnitId, bannerView);
+            //subscribeAdMobImpressions(adUnitId, bannerView);
 #endif
         }
 
@@ -402,7 +413,7 @@ namespace GameAnalyticsSDK
 #if UNITY_EDITOR
             Debug.Log("subscribeAdMobImpressions(adUnitId, interstitialAd)");
 #elif UNITY_IOS || UNITY_ANDROID
-            subscribeAdMobImpressions(adUnitId, interstitialAd);
+            //subscribeAdMobImpressions(adUnitId, interstitialAd);
 #endif
         }
 
@@ -411,7 +422,7 @@ namespace GameAnalyticsSDK
 #if UNITY_EDITOR
             Debug.Log("subscribeAdMobImpressions(adUnitId, rewardedAd)");
 #elif UNITY_IOS || UNITY_ANDROID
-            subscribeAdMobImpressions(adUnitId, rewardedAd);
+            //subscribeAdMobImpressions(adUnitId, rewardedAd);
 #endif
         }
 
@@ -420,8 +431,17 @@ namespace GameAnalyticsSDK
 #if UNITY_EDITOR
             Debug.Log("subscribeAdMobImpressions(adUnitId, rewardedInterstitialAd)");
 #elif UNITY_IOS || UNITY_ANDROID
-            subscribeAdMobImpressions(adUnitId, rewardedInterstitialAd);
+            //subscribeAdMobImpressions(adUnitId, rewardedInterstitialAd);
 #endif
+        }
+
+        public static void SubscribeAdMobImpressions(string adUnitId, GoogleMobileAds.Api.AppOpenAd appOpenAd)
+        {
+            #if UNITY_EDITOR
+                       // Debug.Log("subscribeAdMobImpressions(adUnitId, appOpenAd)");
+            #elif UNITY_IOS || UNITY_ANDROID
+                        //subscribeAdMobImpressions(adUnitId, appOpenAd);
+            #endif
         }
 #endif
     }

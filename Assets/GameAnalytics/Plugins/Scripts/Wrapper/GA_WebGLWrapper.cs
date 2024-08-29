@@ -72,6 +72,15 @@ namespace GameAnalyticsSDK.Wrapper
         [DllImport ("__Internal")]
         private static extern void addErrorEvent(int severity, string message, string fields, bool mergeFields);
 
+        [DllImport("__Internal")]
+        private static extern void addAdEventWithDuration(int adAction, int adType, string adSdkName, string adPlacement, long duration, string fields, bool mergeFields);
+
+        [DllImport("__Internal")]
+        private static extern void addAdEventWithReason(int adAction, int adType, string adSdkName, string adPlacement, int noAdReason, string fields, bool mergeFields);
+
+        [DllImport("__Internal")]
+        private static extern void addAdEvent(int adAction, int adType, string adSdkName, string adPlacement, string fields, bool mergeFields);
+
         [DllImport ("__Internal")]
         private static extern void setEnabledInfoLog(bool enabled);
 
@@ -118,6 +127,11 @@ namespace GameAnalyticsSDK.Wrapper
         private static void configureAutoDetectAppVersion (bool flag)
         {
             // not supported
+        }
+
+        public static string getUserId()
+        {
+            return "";
         }
 
 #endif

@@ -15,7 +15,11 @@ MonoBehaviour:
   qualityServiceEnabled: 1
   sdkKey: Za7F7M5J31fxPs_T58DHF3ZUilfxPreUoArf_mOW1DynJBnFBiEwAboTiJk0zpqz4F_wEDN4z_OPJme2HmT4Df
   setAttributionReportEndpoint: 0
+  addApsSkAdNetworkIds: 0
+  customGradleVersionUrl: 
+  customGradleToolsVersion: 
   consentFlowEnabled: 0
+  consentFlowPlatform: 0
   consentFlowPrivacyPolicyUrl: 
   consentFlowTermsOfServiceUrl: 
   userTrackingUsageDescriptionEn: 
@@ -26,7 +30,7 @@ MonoBehaviour:
   userTrackingUsageDescriptionJa: 
   userTrackingUsageDescriptionKo: 
   userTrackingUsageDescriptionZhHans: 
-  userTrackingUsageDescriptionZhHant: 
+  userTrackingUsageDescriptionZhHant: default_localization
   adMobAndroidAppId: 
   adMobIosAppId: 
-  snapAppStoreAppId: 0
+  showInternalSettingsInIntegrationManager: 0
